@@ -90,7 +90,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shapeCollector: {fileID: 7312085514745209585}
-  height: 30
+  absoluteHeight: 30
+  height: 22
   width: 10
 --- !u!1 &6885993280836473660
 GameObject:

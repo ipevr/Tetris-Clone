@@ -241,6 +241,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1101078185 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7312085514745209585, guid: 9b09ca5f6d1a7314a8fa8fce62287967,
+    type: 3}
+  m_PrefabInstance: {fileID: 6885993280013021753}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1199206786
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,6 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e117bec08a8e65b479f396ff1b6ba3ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shapeCollector: {fileID: 1101078185}
   shapes:
   - {fileID: 6111086913683239932, guid: 8b55bc95a9d955d478a8b10ffb8e5482, type: 3}
   - {fileID: 6111086913683239932, guid: d6fbbb75738c80142accd7510a75055a, type: 3}
@@ -622,11 +629,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6885993280387300886, guid: 9b09ca5f6d1a7314a8fa8fce62287967,
-        type: 3}
-      propertyPath: height
-      value: 22
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b09ca5f6d1a7314a8fa8fce62287967, type: 3}

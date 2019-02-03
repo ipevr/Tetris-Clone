@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-    [SerializeField] Transform  shapeCollector = null;
+    [SerializeField] Transform shapeCollector = null;
     [SerializeField] int absoluteHeight = 30;
     [SerializeField] int height = 22;
     [SerializeField] int width = 10;
@@ -54,14 +54,12 @@ public class Board : MonoBehaviour
     }
 
     public void StoreShapeInGrid(Shape shape) {
-        List<Transform> shapes = new List<Transform>();
         foreach (Transform child in shape.transform) {
             Vector2Int pos = Vector2Int.RoundToInt(child.position);
             grid[pos.x, pos.y] = child;
-            shapes.Add(child);
         }
-        for (int i = 0; i < shapes.Count; i++) {
-            shapes[i].parent = shapeCollector;
+        while (shape.transform.childCount > 0) {
+            shape.transform.GetChild(shape.transform.childCount - 1).SetParent(shapeCollector);
         }
         Destroy(shape.gameObject);
     }
