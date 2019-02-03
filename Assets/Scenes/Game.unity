@@ -143,6 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   board: {fileID: 6885993280013021754}
   spawner: {fileID: 1199206787}
+  panelManager: {fileID: 5161458175807631242}
   dropDownInterval: 1
 --- !u!4 &453712909
 Transform:
@@ -556,8 +557,25 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 49854686570427614, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93a172aa6b0e4ae429e773e7547f5a0f, type: 3}
+--- !u!114 &5161458175807631242 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3941962541219448952, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5161458175807631241}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73c966b7ff2995b469c050483c83c9be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6885993280013021753
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -565,16 +583,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4027602385645499311, guid: 9b09ca5f6d1a7314a8fa8fce62287967,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 23.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4027602385645499311, guid: 9b09ca5f6d1a7314a8fa8fce62287967,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6885993280387300887, guid: 9b09ca5f6d1a7314a8fa8fce62287967,
         type: 3}
       propertyPath: m_Name
@@ -584,6 +592,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4027602385645499311, guid: 9b09ca5f6d1a7314a8fa8fce62287967,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 23.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4027602385645499311, guid: 9b09ca5f6d1a7314a8fa8fce62287967,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6885993280387300872, guid: 9b09ca5f6d1a7314a8fa8fce62287967,
         type: 3}
@@ -607,8 +625,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6885993280387300886, guid: 9b09ca5f6d1a7314a8fa8fce62287967,
         type: 3}
-      propertyPath: width
-      value: 10
+      propertyPath: height
+      value: 22
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b09ca5f6d1a7314a8fa8fce62287967, type: 3}

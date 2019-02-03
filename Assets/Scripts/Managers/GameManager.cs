@@ -7,24 +7,32 @@ public class GameManager : MonoBehaviour {
 
     [SerializeField] Board board = null;
     [SerializeField] Spawner spawner = null;
+    [SerializeField] PanelManager panelManager = null;
     [SerializeField] float dropDownInterval = .5f;
 
     Shape activeShape = null;
     float timeToDrop = 0f;
     float originalDropDownInterval = 0f;
+    int linesCompleted = 0;
+    bool gameOver = false;
 
     void Start() {
         originalDropDownInterval = dropDownInterval;
     }
 
-    void Update()
-    {
-        if (!activeShape) {
-            activeShape = spawner.SpawnShape();
-        } else {
-            DropDownOverTime();
-            CheckForInput();
+    void Update() {
+        if (!gameOver) {
+            if (!activeShape) {
+                activeShape = spawner.SpawnShape();
+            } else {
+                DropDownOverTime();
+                CheckForInput();
+            }
         }
+    }
+
+    void CheckForFullLines() {
+        linesCompleted = board.RemoveFullLines();
     }
 
     void CheckForInput() {
@@ -64,9 +72,16 @@ public class GameManager : MonoBehaviour {
     void SpawnNewShapeWhenPlaced() {
         if (!board.HasShapeValidPosition(activeShape)) {
             activeShape.MoveUp();
-            board.StoreShapeInGrid(activeShape);
-            activeShape = spawner.SpawnShape();
-            dropDownInterval = originalDropDownInterval;
+            gameOver = board.IsGameOver(activeShape);
+            if (!gameOver) {
+                board.StoreShapeInGrid(activeShape);
+                activeShape = spawner.SpawnShape();
+                dropDownInterval = originalDropDownInterval;
+                CheckForFullLines();
+            } else {
+                panelManager.ActivatePanelGameOver();
+            }
+
         }
     }
 }
