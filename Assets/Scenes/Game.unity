@@ -141,8 +141,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd549d907d50614469c508e8960b9b76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameBoard: {fileID: 6885993280013021754}
+  board: {fileID: 6885993280013021754}
   spawner: {fileID: 1199206787}
+  dropDownInterval: 1
 --- !u!4 &453712909
 Transform:
   m_ObjectHideFlags: 0
@@ -567,7 +568,7 @@ PrefabInstance:
     - target: {fileID: 4027602385645499311, guid: 9b09ca5f6d1a7314a8fa8fce62287967,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 23
+      value: 23.5
       objectReference: {fileID: 0}
     - target: {fileID: 4027602385645499311, guid: 9b09ca5f6d1a7314a8fa8fce62287967,
         type: 3}
@@ -603,6 +604,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6885993280387300886, guid: 9b09ca5f6d1a7314a8fa8fce62287967,
+        type: 3}
+      propertyPath: width
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b09ca5f6d1a7314a8fa8fce62287967, type: 3}
