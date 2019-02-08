@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class PanelManager : MonoBehaviour
 {
-    [SerializeField] GameObject panelGameOver;
-    [SerializeField] Text linesText;
-    [SerializeField] Text levelText;
+    [SerializeField] GameObject panelGameOver = null;
+    [SerializeField] Text linesText = null;
+    [SerializeField] Text levelText = null;
 
     void Start() {
         panelGameOver.SetActive(false);

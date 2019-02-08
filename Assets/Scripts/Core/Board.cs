@@ -24,25 +24,6 @@ public class Board : MonoBehaviour
         return grid[x, y] == null;
     }
 
-    void DeleteLine(int lineNumber) {
-        for (int x = 0; x < width; x++) {
-            Destroy(grid[x, lineNumber].gameObject);
-            grid[x, lineNumber] = null;
-        }
-        MoveDownShapesAboveLine(lineNumber);
-    }
-
-    void MoveDownShapesAboveLine(int lineNumber) {
-        for (int y = lineNumber; y < absoluteHeight - 1; y++) {
-            for (int x = 0; x < width; x++) {
-                grid[x, y] = grid[x, y + 1];
-                if (grid[x, y]) {
-                    grid[x, y + 1].position = new Vector3Int(x, y, (int)grid[x, y].position.z);
-                }
-            }
-        }
-    }
-
     public bool HasShapeValidPosition(Shape shape) {
         foreach(Transform child in shape.transform) {
             Vector2Int pos = Vector2Int.RoundToInt(child.position);
@@ -65,9 +46,11 @@ public class Board : MonoBehaviour
     }
 
     public bool IsGameOver(Shape shape) {
+        if (!shape) {
+            return false;
+        }
         foreach (Transform child in shape.transform) {
-            Vector2Int pos = Vector2Int.RoundToInt(child.position);
-            if (pos.y >= height) {
+            if (child.position.y >= height) {
                 return true;
             }
         }
@@ -75,17 +58,9 @@ public class Board : MonoBehaviour
     }
 
     public int RemoveFullLines() {
-        bool fullLine = false;
         int numberOfFullLines = 0;
         for (int y = 0; y < absoluteHeight; y++) {
-            fullLine = true;
-            for (int x = 0; x < width; x++) {
-                if (grid[x, y] == null) {
-                    fullLine = false;
-                }
-            }
-            if (fullLine) {
-                Debug.Log("Full line detected");
+            if (LineIsComplete(y)) {
                 numberOfFullLines++;
                 DeleteLine(y);
                 y--;
@@ -94,4 +69,38 @@ public class Board : MonoBehaviour
         return numberOfFullLines;
     }
 
+    bool LineIsComplete(int y) {
+        for (int x = 0; x < width; x++) {
+            if (grid[x, y] == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void DeleteLine(int y) {
+        for (int x = 0; x < width; x++) {
+            if (grid[x, y] != null) {
+                Destroy(grid[x, y].gameObject);
+                grid[x, y] = null;
+            }
+        }
+        MoveDownAllLinesFrom(y + 1);
+    }
+
+    void MoveDownAllLinesFrom(int lineNumber) {
+        for (int y = lineNumber; y < absoluteHeight; y++) {
+            MoveDownLine(y);
+        }
+    }
+
+    void MoveDownLine(int y) {
+        for (int x = 0; x < width; x++) {
+            if (grid[x, y]) {
+                grid[x, y - 1] = grid[x, y];
+                grid[x, y] = null;
+                grid[x, y - 1].position += new Vector3(0, -1, 0);
+            }
+        }
+    }
 }
