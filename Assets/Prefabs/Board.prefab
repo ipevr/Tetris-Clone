@@ -83,6 +83,7 @@ MonoBehaviour:
   - {fileID: 6111086913683239932, guid: 49f79cce18578a146a3aacf99dad8427, type: 3}
   spawnPoint: {fileID: 4027602385645499311}
   spawnPointNextShape: {fileID: 2318197364591494863}
+  zoomFactorNextShape: 0.5
 --- !u!1 &6297155322068804045
 GameObject:
   m_ObjectHideFlags: 0
