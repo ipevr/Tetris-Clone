@@ -154,6 +154,7 @@ MonoBehaviour:
   speedIncreaseFactorPerLevel: 0.01
   shapeLandScore: 10
   fullLineScore: 320000007d000000c800000090010000
+  resetHighScore: 0
 --- !u!4 &453712909
 Transform:
   m_ObjectHideFlags: 0
@@ -451,6 +452,33 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 355203843170276500, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
+        type: 3}
+      propertyPath: m_Text
+      value: 'PRESS "ENTER" TO PLAY AGAIN
+
+        PRESS "ESC" TO EXIT GAME'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093572355754395372, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093572355754395372, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093572355754395372, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093572355754395372, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5009372513898610205, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -666,6 +694,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8651848691545889178, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
+        type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1734348091241421813, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -696,6 +729,16 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7434067023288299811, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
+        type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5347941778601984699, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
+        type: 3}
+      propertyPath: m_Spacing
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 1652422991607511454, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -735,6 +778,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6341820572295297836, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
+        type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93a172aa6b0e4ae429e773e7547f5a0f, type: 3}

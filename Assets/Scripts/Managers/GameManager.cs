@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -9,6 +10,8 @@ public class GameManager : MonoBehaviour {
     const string BUTTON_RIGHT = "MoveRight";
     const string BUTTON_LEFT = "MoveLeft";
     const string BUTTON_DOWN = "MoveDown";
+    const string BUTTON_PLAY_AGAIN = "PlayAgain";
+    const string BUTTON_EXIT_GAME = "ExitGame";
 
     [SerializeField] Board board = null;
     [SerializeField] Spawner spawner = null;
@@ -53,6 +56,8 @@ public class GameManager : MonoBehaviour {
                 DropDownOverTime();
                 CheckForInput();
             }
+        } else {
+            CheckForInputGameOver();
         }
     }
 
@@ -96,6 +101,16 @@ public class GameManager : MonoBehaviour {
         }
         if (Input.GetButtonUp(BUTTON_LEFT) || Input.GetButtonUp(BUTTON_RIGHT)) {
             keyRepeatStarted = false;
+        }
+    }
+
+    void CheckForInputGameOver() {
+        if (Input.GetButtonDown(BUTTON_PLAY_AGAIN)) {
+            SceneManager.LoadScene(0);
+        }
+        if (Input.GetButtonDown(BUTTON_EXIT_GAME)) {
+            Application.Quit();
+            Debug.Log("Quit Application requested");
         }
     }
 
