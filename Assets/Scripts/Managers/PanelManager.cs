@@ -6,27 +6,41 @@ using UnityEngine.UI;
 
 public class PanelManager : MonoBehaviour
 {
+    const string NEW_HIGH_SCORE_TEXT = "NEW HIGH SCORE!";
+    const string HIGH_SCORE_TEXT = "HIGH SCORE:";
+
     [SerializeField] GameObject panelGameOver = null;
     [SerializeField] Text linesText = null;
     [SerializeField] Text levelText = null;
     [SerializeField] Text scoreText = null;
+    [SerializeField] Text highScoreText = null;
+    [SerializeField] Text highScoreLabel = null;
     [SerializeField] Text flyingScoreText = null;
     [SerializeField] float timeShowingFlyingScore = 2f;
     [SerializeField] float flyingScoreEndPosition = 300f;
-    [SerializeField] Color[] flyingScoreColors;
+    [SerializeField] Color[] flyingScoreColors = new Color[] { };
+    [SerializeField] int noramlFontSizeFlyingScore = 60;
+    [SerializeField] int superBonusFontSizeFlyingScore = 80;
+    [SerializeField] float superBonusChangeColorInterval = 0.2f;
 
+    SoundManager soundManager;
     Vector3 originalPositionFlyingScore = Vector3.zero;
+    
 
     void Start() {
+        soundManager = FindObjectOfType<SoundManager>();
         panelGameOver.SetActive(false);
         linesText.text = "0";
         levelText.text = "1";
         originalPositionFlyingScore = flyingScoreText.transform.position;
+        flyingScoreText.fontSize = noramlFontSizeFlyingScore;
         flyingScoreText.enabled = false;
     }
 
-    public void ActivatePanelGameOver() {
+    public void HandleGameOver(int score, bool isHighScore) {
         panelGameOver.SetActive(true);
+        highScoreLabel.text = isHighScore ? NEW_HIGH_SCORE_TEXT : HIGH_SCORE_TEXT;
+        highScoreText.text = ScoreManager.GetHighScore().ToString();
     }
 
     public void SetLinesToNumber (int number) {
@@ -41,21 +55,39 @@ public class PanelManager : MonoBehaviour
         scoreText.text = totalScore.ToString();
     }
 
-    public void ShowFlyingScore(int score) {
+    public void ShowFlyingScore(int score, bool superBonus) {
         StopAllCoroutines();
-        flyingScoreText.transform.position = originalPositionFlyingScore;
-        flyingScoreText.enabled = true;
-        flyingScoreText.text = "+" + score.ToString();
-        flyingScoreText.color = flyingScoreColors[UnityEngine.Random.Range(0, flyingScoreColors.Length)];
-        StartCoroutine(ShowFlyingScoreOverTime(score));
+        SetFlyingScoreProperties(score, superBonus);
+        StartCoroutine(ShowFlyingScoreOverTime(score, superBonus));
     }
 
-    IEnumerator ShowFlyingScoreOverTime(float score) {
+    public void ShowHighScore() {
+        int highScore = ScoreManager.GetHighScore();
+    }
+
+    void SetFlyingScoreProperties(int score, bool superBonus) {
+        flyingScoreText.transform.position = originalPositionFlyingScore;
+        flyingScoreText.enabled = true;
+        if (superBonus) {
+            flyingScoreText.fontSize = superBonusFontSizeFlyingScore;
+        } else {
+            flyingScoreText.fontSize = noramlFontSizeFlyingScore;
+        }
+        flyingScoreText.text = "+" + score.ToString();
+        flyingScoreText.color = flyingScoreColors[UnityEngine.Random.Range(0, flyingScoreColors.Length)];
+    }
+
+    IEnumerator ShowFlyingScoreOverTime(float score, bool superBonus) {
         float elapsedTime = 0f;
+        float nextTimeToChangeColor = superBonusChangeColorInterval;
         Vector3 endPos = new Vector3(originalPositionFlyingScore.x, originalPositionFlyingScore.y + flyingScoreEndPosition);
         while (elapsedTime < timeShowingFlyingScore) {
             flyingScoreText.transform.position = Vector3.Lerp(originalPositionFlyingScore, endPos, elapsedTime / timeShowingFlyingScore);
             elapsedTime += Time.deltaTime;
+            if (superBonus && elapsedTime > nextTimeToChangeColor) {
+                flyingScoreText.color = flyingScoreColors[UnityEngine.Random.Range(0, flyingScoreColors.Length)];
+                nextTimeToChangeColor += superBonusChangeColorInterval;
+            }
             yield return new WaitForEndOfFrame();
         }
         flyingScoreText.transform.position = originalPositionFlyingScore;

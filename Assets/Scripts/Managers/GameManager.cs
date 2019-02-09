@@ -24,14 +24,10 @@ public class GameManager : MonoBehaviour {
     [Header("Score")]
     [SerializeField] int shapeLandScore = 10;
     [SerializeField] int[] fullLineScore = new int[4];
-    [Header("Sounds")]
-    [SerializeField] AudioClip shapeLandsClip = null;
-    [SerializeField] AudioClip fullLineClip = null;
-    [SerializeField] AudioClip fourFullLinesClip = null;
-    [SerializeField] AudioClip gameOverClip = null;
+    [SerializeField] bool resetHighScore = false;
 
     Shape activeShape = null;
-    AudioSource audioSource = null;
+    SoundManager soundManager;
     float timeToDrop = 0f;
     int linesCompletedOverAll = 0;
     bool gameOver = false;
@@ -43,7 +39,10 @@ public class GameManager : MonoBehaviour {
     int totalScore = 0;
 
     void Start() {
-        audioSource = GetComponent<AudioSource>();
+        soundManager = GetComponent<SoundManager>();
+        if (resetHighScore) {
+            ScoreManager.ResetHighScore();
+        }
     }
 
     void Update() {
@@ -113,7 +112,7 @@ public class GameManager : MonoBehaviour {
     void SpawnNewShapeWhenPlaced() {
         fastDropRequired = false;
         activeShape.MoveUp();
-        audioSource.PlayOneShot(shapeLandsClip);
+        soundManager.PlayClipShapeLands();
         totalScore += shapeLandScore;
         gameOver = board.IsGameOver(activeShape);
         if (!gameOver) {
@@ -121,10 +120,20 @@ public class GameManager : MonoBehaviour {
             activeShape = spawner.SpawnShape();
             CheckForFullLines();
         } else {
-            panelManager.ActivatePanelGameOver();
-            audioSource.PlayOneShot(gameOverClip);
+            HandleGameOver();
         }
         panelManager.SetTotalScore(totalScore);
+    }
+
+    void HandleGameOver() {
+        bool highScore = false;
+        if (totalScore > ScoreManager.GetHighScore()) {
+            highScore = true;
+            ScoreManager.SaveScore(totalScore);
+            soundManager.PlayNewHighScoreClip();
+        }
+        panelManager.HandleGameOver(totalScore, highScore);
+        soundManager.PlayGameOverClip();
     }
 
     void CheckForFullLines() {
@@ -140,9 +149,9 @@ public class GameManager : MonoBehaviour {
             panelManager.SetLinesToNumber(linesCompletedOverAll);
             CheckForLevelUp();
         }
-        audioSource.PlayOneShot(linesCompleted < 4 ? fullLineClip : fourFullLinesClip);
+        soundManager.PlayFullLinesClip(linesCompleted - 1);
         totalScore += fullLineScore[linesCompleted - 1];
-        panelManager.ShowFlyingScore(fullLineScore[linesCompleted - 1]);
+        panelManager.ShowFlyingScore(fullLineScore[linesCompleted - 1], linesCompleted == 4 ? true : false);
     }
 
     void CheckForLevelUp() {
