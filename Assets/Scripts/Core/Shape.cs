@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ShapeType { i, j, l, o, s, t, z}
+
 public class Shape : MonoBehaviour {
+
     [SerializeField] bool canRotate = true;
-
-    private void Start() {
-
-    }
+    [SerializeField] ShapeType shapeType;
 
     void Move(Vector3 moveDirection) {
         transform.position += moveDirection;
@@ -39,5 +39,9 @@ public class Shape : MonoBehaviour {
         if (canRotate) {
             transform.Rotate(new Vector3(0, 0, 90));
         }
+    }
+
+    public ShapeType GetShapeType() {
+        return shapeType;
     }
 }

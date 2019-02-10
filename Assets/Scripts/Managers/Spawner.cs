@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
-{
+public class Spawner : MonoBehaviour {
 
     [SerializeField] Shape[] shapes = new Shape[] { };
     [SerializeField] Transform spawnPoint = null;
-    [SerializeField] Transform spawnPointNextShape = null;
-    [SerializeField] float zoomFactorNextShape = .8f;
 
     int shapesSpawned = 0;
     Shape nextShape = null;
     Shape actualShape = null;
+    SpawnPointNextShape spawnPointNextShape = null;
+
+    void Start() {
+        spawnPointNextShape = FindObjectOfType<SpawnPointNextShape>();
+    }
 
     Shape GetRandomShape() {
         return shapes[Random.Range(0, shapes.Length)];
@@ -20,16 +22,20 @@ public class Spawner : MonoBehaviour
 
     public Shape SpawnShape() {
         if (shapesSpawned == 0) {
-            actualShape = Instantiate(GetRandomShape(), Vector3Int.RoundToInt(spawnPoint.position), Quaternion.identity);
+            actualShape = Instantiate(GetRandomShape(), Vector3Int.RoundToInt(spawnPoint.position), Quaternion.identity, spawnPoint.transform);
         } else {
             actualShape = nextShape;
-            actualShape.transform.localScale = Vector3.one;
-            actualShape.transform.position = spawnPoint.position;
+            TransferActualShapeToGameBoard();
         }
-        nextShape = Instantiate(GetRandomShape(), Vector3Int.RoundToInt(spawnPointNextShape.position), Quaternion.identity);
-        nextShape.transform.localScale = new Vector3(zoomFactorNextShape, zoomFactorNextShape);
+        nextShape = Instantiate(GetRandomShape());
+        spawnPointNextShape.SetParent(nextShape);
         shapesSpawned++;
         return actualShape;
     }
 
+    void TransferActualShapeToGameBoard() {
+        actualShape.transform.parent = spawnPoint;
+        actualShape.transform.position = spawnPoint.position;
+        actualShape.transform.localScale = Vector3.one;
+    }
 }
