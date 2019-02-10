@@ -70,6 +70,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6229037303900990825}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_GeneratorAsset: {fileID: 0}
   m_Script: {fileID: 11500000, guid: e117bec08a8e65b479f396ff1b6ba3ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -82,8 +83,6 @@ MonoBehaviour:
   - {fileID: 6111086913683239932, guid: 74289bba3c1d9534497ec6b9a5027c27, type: 3}
   - {fileID: 6111086913683239932, guid: 49f79cce18578a146a3aacf99dad8427, type: 3}
   spawnPoint: {fileID: 4027602385645499311}
-  spawnPointNextShape: {fileID: 2318197364591494863}
-  zoomFactorNextShape: 0.5
 --- !u!1 &6297155322068804045
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,6 +171,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6885993280387300887}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_GeneratorAsset: {fileID: 0}
   m_Script: {fileID: 11500000, guid: 25af3e4d4cafa264397cf46333169d0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -179,6 +179,9 @@ MonoBehaviour:
   absoluteHeight: 30
   height: 22
   width: 10
+  timeToWaitAfterLineDeleted: 0.5
+  destroyBlockParticle: {fileID: 7954544375853611088, guid: 8d9aa41bfbd3eab44aaba6fc2b150d49,
+    type: 3}
 --- !u!1 &6885993280836473660
 GameObject:
   m_ObjectHideFlags: 0
@@ -2283,6 +2286,7 @@ TilemapRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

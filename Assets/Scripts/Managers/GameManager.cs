@@ -164,7 +164,6 @@ public class GameManager : MonoBehaviour {
             panelManager.SetLinesToNumber(linesCompletedOverAll);
             CheckForLevelUp();
         }
-        soundManager.PlayFullLinesClip(linesCompleted - 1);
         totalScore += fullLineScore[linesCompleted - 1];
         panelManager.ShowFlyingScore(fullLineScore[linesCompleted - 1], linesCompleted == 4 ? true : false);
     }

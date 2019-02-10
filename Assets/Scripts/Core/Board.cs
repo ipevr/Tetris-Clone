@@ -9,19 +9,19 @@ public class Board : MonoBehaviour
     [SerializeField] int absoluteHeight = 30;
     [SerializeField] int height = 22;
     [SerializeField] int width = 10;
+    [SerializeField] float timeToWaitAfterLineDeleted = 0.2f;
+    [SerializeField] Transform destroyBlockParticle;
 
+    SoundManager soundManager;
     Transform[,] grid;
+    int numberOfFullLines = 0;
 
     void Awake() {
         grid = new Transform[width, absoluteHeight];
     }
 
-    bool IsWithinBoard(int x, int y) {
-        return ((x >= 0 && x < width) && (y >= 0 && y < absoluteHeight));
-    }
-
-    bool IsInFreeGrid(int x, int y) {
-        return grid[x, y] == null;
+    void Start() {
+        soundManager = FindObjectOfType<SoundManager>();
     }
 
     public bool HasShapeValidPosition(Shape shape) {
@@ -58,15 +58,16 @@ public class Board : MonoBehaviour
     }
 
     public int RemoveFullLines() {
-        int numberOfFullLines = 0;
-        for (int y = 0; y < absoluteHeight; y++) {
-            if (LineIsComplete(y)) {
-                numberOfFullLines++;
-                DeleteLine(y);
-                y--;
-            }
-        }
+        StartCoroutine(RemoveFullLinesStepByStep());
         return numberOfFullLines;
+    }
+
+    bool IsWithinBoard(int x, int y) {
+        return ((x >= 0 && x < width) && (y >= 0 && y < absoluteHeight));
+    }
+
+    bool IsInFreeGrid(int x, int y) {
+        return grid[x, y] == null;
     }
 
     bool LineIsComplete(int y) {
@@ -75,6 +76,7 @@ public class Board : MonoBehaviour
                 return false;
             }
         }
+        PlayParticleEffectAt(y);
         return true;
     }
 
@@ -86,6 +88,17 @@ public class Board : MonoBehaviour
             }
         }
         MoveDownAllLinesFrom(y + 1);
+    }
+
+    void PlayParticleEffectAt(int y) {
+        for (int x = 0; x < width; x++) {
+            Transform particle = Instantiate(destroyBlockParticle, new Vector3(x, y), Quaternion.identity);
+            ParticleSystem particleSystem = particle.GetComponent<ParticleSystem>();
+            ParticleSystem.MainModule main = particleSystem.main;
+            main.startColor = grid[x, y].GetComponent<SpriteRenderer>().color;
+            particleSystem.Play();
+            StartCoroutine(DestroyParticleSystemWhenPlayed(particle));
+        }
     }
 
     void MoveDownAllLinesFrom(int lineNumber) {
@@ -102,5 +115,26 @@ public class Board : MonoBehaviour
                 grid[x, y - 1].position += new Vector3(0, -1, 0);
             }
         }
+    }
+
+    IEnumerator RemoveFullLinesStepByStep() {
+        numberOfFullLines = 0;
+        for (int y = 0; y < absoluteHeight; y++) {
+            if (LineIsComplete(y)) {
+                numberOfFullLines++;
+                DeleteLine(y);
+                y--;
+                soundManager.PlayFullLinesClip(numberOfFullLines - 1);
+                yield return new WaitForSeconds(timeToWaitAfterLineDeleted);
+            }
+        }
+        yield return new WaitForEndOfFrame();
+    }
+
+    IEnumerator DestroyParticleSystemWhenPlayed(Transform particle) {
+        while (particle.GetComponent<ParticleSystem>().isPlaying) {
+            yield return new WaitForEndOfFrame();
+        }
+        Destroy(particle.gameObject);
     }
 }
