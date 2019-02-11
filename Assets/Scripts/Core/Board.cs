@@ -87,15 +87,13 @@ public class Board : MonoBehaviour
                 grid[x, y] = null;
             }
         }
-        MoveDownAllLinesFrom(y + 1);
     }
 
     void PlayParticleEffectAt(int y) {
         for (int x = 0; x < width; x++) {
             Transform particle = Instantiate(destroyBlockParticle, new Vector3(x, y), Quaternion.identity);
             ParticleSystem particleSystem = particle.GetComponent<ParticleSystem>();
-            ParticleSystem.MainModule main = particleSystem.main;
-            main.startColor = grid[x, y].GetComponent<SpriteRenderer>().color;
+            particle.GetComponent<ParticleController>().SetSubParticleColor(0, grid[x, y].GetComponent<SpriteRenderer>().color);
             particleSystem.Play();
             StartCoroutine(DestroyParticleSystemWhenPlayed(particle));
         }
@@ -126,6 +124,7 @@ public class Board : MonoBehaviour
                 y--;
                 soundManager.PlayFullLinesClip(numberOfFullLines - 1);
                 yield return new WaitForSeconds(timeToWaitAfterLineDeleted);
+                MoveDownAllLinesFrom(y + 1);
             }
         }
         yield return new WaitForEndOfFrame();

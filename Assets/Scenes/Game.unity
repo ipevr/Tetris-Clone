@@ -392,12 +392,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e117bec08a8e65b479f396ff1b6ba3ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &1313957372 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 554566802300488576, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
-    type: 3}
-  m_PrefabInstance: {fileID: 5161458175807631241}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1889988038
 GameObject:
   m_ObjectHideFlags: 0
@@ -570,10 +564,10 @@ PrefabInstance:
       propertyPath: m_FontData.m_Alignment
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3941962541219448952, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
+    - target: {fileID: 8016020711388075692, guid: 93a172aa6b0e4ae429e773e7547f5a0f,
         type: 3}
-      propertyPath: flyingScoreEndPosition
-      value: 10
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93a172aa6b0e4ae429e773e7547f5a0f, type: 3}
@@ -616,7 +610,7 @@ PrefabInstance:
         type: 3}
       propertyPath: spawnPointNextShape
       value: 
-      objectReference: {fileID: 1313957372}
+      objectReference: {fileID: 0}
     - target: {fileID: 6885993280387300872, guid: 9b09ca5f6d1a7314a8fa8fce62287967,
         type: 3}
       propertyPath: m_RootOrder
