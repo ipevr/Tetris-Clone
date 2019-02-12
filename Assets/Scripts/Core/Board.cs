@@ -62,6 +62,12 @@ public class Board : MonoBehaviour
         return numberOfFullLines;
     }
 
+    public void PutShapesToBackground() {
+        foreach (Transform child in shapeCollector) {
+            child.GetComponent<SpriteRenderer>().sortingLayerName = "Default";
+        }
+    }
+
     bool IsWithinBoard(int x, int y) {
         return ((x >= 0 && x < width) && (y >= 0 && y < absoluteHeight));
     }
@@ -136,4 +142,5 @@ public class Board : MonoBehaviour
         }
         Destroy(particle.gameObject);
     }
+
 }

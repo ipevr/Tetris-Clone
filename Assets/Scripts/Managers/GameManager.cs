@@ -148,6 +148,7 @@ public class GameManager : MonoBehaviour {
             soundManager.PlayNewHighScoreClip();
         }
         panelManager.HandleGameOver(totalScore, highScore);
+        board.PutShapesToBackground();
         soundManager.PlayGameOverClip();
     }
 
