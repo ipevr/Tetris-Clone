@@ -10,7 +10,7 @@ public class Board : MonoBehaviour
     [SerializeField] int height = 22;
     [SerializeField] int width = 10;
     [SerializeField] float timeToWaitAfterLineDeleted = 0.2f;
-    [SerializeField] Transform destroyBlockParticle;
+    [SerializeField] Transform destroyBlockParticle = null;
 
     SoundManager soundManager;
     Transform[,] grid;

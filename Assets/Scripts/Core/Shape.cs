@@ -7,7 +7,7 @@ public enum ShapeType { i, j, l, o, s, t, z}
 public class Shape : MonoBehaviour {
 
     [SerializeField] bool canRotate = true;
-    [SerializeField] ShapeType shapeType;
+    [SerializeField] ShapeType shapeType = ShapeType.i;
 
     void Move(Vector3 moveDirection) {
         transform.position += moveDirection;

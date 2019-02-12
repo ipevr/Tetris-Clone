@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ParticleController : MonoBehaviour {
 
-    [SerializeField] ParticleSystem[] subParticles;
+    [SerializeField] ParticleSystem[] subParticles = new ParticleSystem[] { };
 
     public void SetSubParticleColor(int index, Color color) {
         ParticleSystem particleSystem = subParticles[index].GetComponent<ParticleSystem>();

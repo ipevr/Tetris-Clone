@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SpawnPointNextShape : MonoBehaviour
 {
-    [SerializeField] Shape[] shapes;
-    [SerializeField] Transform[] shapeParents;
+    [SerializeField] Shape[] shapes = new Shape[] { };
+    [SerializeField] Transform[] shapeParents = new Transform[] { };
 
     public void SetParent(Shape shape) {
         for (int i = 0; i < shapes.Length; i++) {

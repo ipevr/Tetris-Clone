@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     const string BUTTON_DOWN = "MoveDown";
     const string BUTTON_PLAY_AGAIN = "PlayAgain";
     const string BUTTON_EXIT_GAME = "ExitGame";
+    const string BUTTON_PAUSE_GAME = "PauseGame";
 
     [SerializeField] Board board = null;
     [SerializeField] Spawner spawner = null;
@@ -57,8 +58,10 @@ public class GameManager : MonoBehaviour {
                 DropDownOverTime();
                 CheckForInput();
             }
-        } else {
+        } else if (gameOver) {
             CheckForInputGameOver();
+        } else if (paused) {
+            CheckForInputGamePaused();
         }
     }
 
@@ -108,6 +111,9 @@ public class GameManager : MonoBehaviour {
         if (Input.GetButtonUp(BUTTON_LEFT) || Input.GetButtonUp(BUTTON_RIGHT)) {
             keyRepeatStarted = false;
         }
+        if (Input.GetButtonDown(BUTTON_PAUSE_GAME)) {
+            PauseResumeGame();
+        }
     }
 
     void CheckForInputGameOver() {
@@ -117,6 +123,12 @@ public class GameManager : MonoBehaviour {
         if (Input.GetButtonDown(BUTTON_EXIT_GAME)) {
             Application.Quit();
             Debug.Log("Quit Application requested");
+        }
+    }
+
+    void CheckForInputGamePaused() {
+        if (Input.GetButtonDown(BUTTON_PAUSE_GAME)) {
+            PauseResumeGame();
         }
     }
 
