@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour {
     bool keyRepeatStarted = false;
     int actualLevel = 1;
     int totalScore = 0;
+    bool paused = false;
 
     void Start() {
         soundManager = GetComponent<SoundManager>();
@@ -49,7 +50,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void Update() {
-        if (!gameOver) {
+        if (!gameOver && !paused) {
             if (!activeShape) {
                 activeShape = spawner.SpawnShape();
             } else {
@@ -59,6 +60,11 @@ public class GameManager : MonoBehaviour {
         } else {
             CheckForInputGameOver();
         }
+    }
+
+    public void PauseResumeGame() {
+        paused = !paused;
+        panelManager.ShowPausedPanel(paused);
     }
 
     void CheckForInput() {
@@ -148,7 +154,7 @@ public class GameManager : MonoBehaviour {
             soundManager.PlayNewHighScoreClip();
         }
         panelManager.HandleGameOver(totalScore, highScore);
-        board.PutShapesToBackground();
+        board.PutShapesToLayername("Default");
         soundManager.PlayGameOverClip();
     }
 

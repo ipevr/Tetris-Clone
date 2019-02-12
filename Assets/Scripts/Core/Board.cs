@@ -62,9 +62,10 @@ public class Board : MonoBehaviour
         return numberOfFullLines;
     }
 
-    public void PutShapesToBackground() {
-        foreach (Transform child in shapeCollector) {
-            child.GetComponent<SpriteRenderer>().sortingLayerName = "Default";
+    public void PutShapesToLayername(string name) {
+        SpriteRenderer[] renderers = transform.GetComponentsInChildren<SpriteRenderer>();
+        for (int i = 0; i < renderers.Length; i++) {
+            renderers[i].sortingLayerName = name;
         }
     }
 

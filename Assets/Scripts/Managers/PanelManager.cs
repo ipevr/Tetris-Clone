@@ -10,6 +10,7 @@ public class PanelManager : MonoBehaviour
     const string HIGH_SCORE_TEXT = "HIGH SCORE:";
 
     [SerializeField] GameObject panelGameOver = null;
+    [SerializeField] GameObject panelPaused = null;
     [SerializeField] Text linesText = null;
     [SerializeField] Text levelText = null;
     [SerializeField] Text scoreText = null;
@@ -24,17 +25,29 @@ public class PanelManager : MonoBehaviour
     [SerializeField] float superBonusChangeColorInterval = 0.2f;
 
     SoundManager soundManager;
+    Board board;
     Vector3 originalPositionFlyingScore = Vector3.zero;
     
 
     void Start() {
         soundManager = FindObjectOfType<SoundManager>();
+        board = FindObjectOfType<Board>();
         panelGameOver.SetActive(false);
+        panelPaused.SetActive(false);
         linesText.text = "0";
         levelText.text = "1";
         originalPositionFlyingScore = flyingScoreText.transform.position;
         flyingScoreText.fontSize = noramlFontSizeFlyingScore;
         flyingScoreText.enabled = false;
+    }
+
+    public void ShowPausedPanel(bool status) {
+        panelPaused.SetActive(status);
+        if (status) {
+            board.PutShapesToLayername("Default");
+        } else {
+            board.PutShapesToLayername("Sprites");
+        }
     }
 
     public void HandleGameOver(int score, bool isHighScore) {
