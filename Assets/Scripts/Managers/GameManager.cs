@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour {
     bool paused = false;
 
     void Start() {
-        soundManager = GetComponent<SoundManager>();
+        soundManager = FindObjectOfType<SoundManager>();
         if (resetHighScore) {
             ScoreManager.ResetHighScore();
         }
@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour {
     public void PauseResumeGame() {
         paused = !paused;
         panelManager.ShowPausedPanel(paused);
+        soundManager.PlayBackgroundMusic(!paused);
     }
 
     void CheckForInput() {
@@ -167,6 +168,7 @@ public class GameManager : MonoBehaviour {
         }
         panelManager.HandleGameOver(totalScore, highScore);
         board.PutShapesToLayername("Default");
+        soundManager.PlayBackgroundMusic(false);
         soundManager.PlayGameOverClip();
     }
 
