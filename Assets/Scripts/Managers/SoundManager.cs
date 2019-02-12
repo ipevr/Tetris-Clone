@@ -12,8 +12,11 @@ public class SoundManager : MonoBehaviour {
     [SerializeField] AudioClip newHighScoreClip = null;
     [Header("Background")]
     [SerializeField] AudioSource backgroundMusic = null;
+    [SerializeField] IconToggle iconToggleMusic;
 
     AudioSource audioSource = null;
+    bool musicToggledOff = false;
+    bool gamePaused = false;
 
     void Start() {
         audioSource = GetComponent<AudioSource>();
@@ -39,10 +42,25 @@ public class SoundManager : MonoBehaviour {
     }
 
     public void PlayBackgroundMusic(bool status) {
-        if (status) {
-            backgroundMusic.Play();
+        gamePaused = status ? false : true;
+        if (status && !musicToggledOff) {
+            backgroundMusic.UnPause();
         } else {
             backgroundMusic.Pause();
+        }
+    }
+
+    public void ToggleBackgroundMusic() {
+        if (gamePaused) {
+            return;
+        }
+        musicToggledOff = !musicToggledOff;
+        if (!musicToggledOff) {
+            backgroundMusic.UnPause();
+            iconToggleMusic.ToggleIcon(true);
+        } else {
+            backgroundMusic.Pause();
+            iconToggleMusic.ToggleIcon(false);
         }
     }
 }
