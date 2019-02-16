@@ -6,8 +6,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Image))]
 public class IconToggle : MonoBehaviour {
 
-    [SerializeField] Sprite iconTrue;
-    [SerializeField] Sprite iconFalse;
+    [SerializeField] Sprite iconTrue = null;
+    [SerializeField] Sprite iconFalse =null;
     [SerializeField] bool defualtIconState = true;
     Image image;
 

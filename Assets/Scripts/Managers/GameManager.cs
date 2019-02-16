@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour {
     const string BUTTON_PLAY_AGAIN = "PlayAgain";
     const string BUTTON_EXIT_GAME = "ExitGame";
     const string BUTTON_PAUSE_GAME = "PauseGame";
+    const string BUTTON_TOGGLE_ROTATION = "ToggleRotation";
+    const string BUTTON_TOGGLE_MUSIC = "ToggleMusic";
+    const string BUTTON_TOGGLE_SOUND = "ToggleSound";
 
     [SerializeField] Board board = null;
     [SerializeField] Spawner spawner = null;
@@ -22,6 +25,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] float dropDownFastSpeed = .05f;
     [SerializeField] float keyRepeatStart = .5f;
     [SerializeField] float keyRepeatRate = .25f;
+    [SerializeField] IconToggle iconToggleRotation = null;
     [Header("Level Up")]
     [SerializeField] int levelUpAfterCompletedLines = 10;
     [SerializeField] float speedIncreaseFactorPerLevel = .1f;
@@ -42,6 +46,7 @@ public class GameManager : MonoBehaviour {
     int actualLevel = 1;
     int totalScore = 0;
     bool paused = false;
+    bool rotationLeft = true;
 
     void Start() {
         soundManager = FindObjectOfType<SoundManager>();
@@ -71,13 +76,36 @@ public class GameManager : MonoBehaviour {
         soundManager.PlayBackgroundMusic(!paused);
     }
 
+    public void ToggleRotation() {
+        rotationLeft = !rotationLeft;
+        iconToggleRotation.ToggleIcon(rotationLeft);
+    }
+
     void CheckForInput() {
+        CheckForButtonDown();
+        CheckForButtonsLeftRight();
+        CheckForExtraButtons();
+    }
+
+    void CheckForButtonDown() {
         if (Input.GetButtonDown(BUTTON_ROTATE)) {
-            activeShape.RotateLeft();
+            activeShape.Rotate(rotationLeft ? Direction.left : Direction.right);
             if (!board.HasShapeValidPosition(activeShape)) {
-                activeShape.RotateRight();
+                activeShape.Rotate(rotationLeft ? Direction.right : Direction.left);
             }
         }
+        if (Input.GetButtonDown(BUTTON_DOWN)) {
+            timeToDrop = Time.time;
+            fastDropRequired = true;
+            DropDownOverTime();
+        }
+        if (Input.GetButtonUp(BUTTON_DOWN)) {
+            fastDropRequired = false;
+            DropDownOverTime();
+        }
+    }
+
+    void CheckForButtonsLeftRight() {
         if (Input.GetButton(BUTTON_LEFT) && Time.time > timeToRepeat && Time.time > timeToNextKey || Input.GetButtonDown(BUTTON_LEFT)) {
             if (!keyRepeatStarted) {
                 timeToRepeat = Time.time + keyRepeatStart;
@@ -100,20 +128,23 @@ public class GameManager : MonoBehaviour {
                 activeShape.MoveLeft();
             }
         }
-        if (Input.GetButtonDown(BUTTON_DOWN)) {
-            timeToDrop = Time.time;
-            fastDropRequired = true;
-            DropDownOverTime();
-        }
-        if (Input.GetButtonUp(BUTTON_DOWN)) {
-            fastDropRequired = false;
-            DropDownOverTime();
-        }
         if (Input.GetButtonUp(BUTTON_LEFT) || Input.GetButtonUp(BUTTON_RIGHT)) {
             keyRepeatStarted = false;
         }
+    }
+
+    void CheckForExtraButtons() {
         if (Input.GetButtonDown(BUTTON_PAUSE_GAME)) {
             PauseResumeGame();
+        }
+        if (Input.GetButtonDown(BUTTON_TOGGLE_ROTATION)) {
+            ToggleRotation();
+        }
+        if (Input.GetButtonDown(BUTTON_TOGGLE_MUSIC)) {
+            soundManager.ToggleBackgroundMusic();
+        }
+        if (Input.GetButtonDown(BUTTON_TOGGLE_SOUND)) {
+            soundManager.ToggleSound();
         }
     }
 

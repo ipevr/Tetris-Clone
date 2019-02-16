@@ -394,6 +394,7 @@ MonoBehaviour:
   dropDownFastSpeed: 0.01
   keyRepeatStart: 0.25
   keyRepeatRate: 0.025
+  iconToggleRotation: {fileID: 1034077648}
   levelUpAfterCompletedLines: 10
   speedIncreaseFactorPerLevel: 0.01
   shapeLandScore: 10
@@ -692,6 +693,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &587390652 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2881072177195794460, guid: 5215e539e30764640ae3821129a52138,
+    type: 3}
+  m_PrefabInstance: {fileID: 831945816}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_GeneratorAsset: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 4f5ade6f98c0e824da9915dcb8beb1d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &614269960 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7208150654766498310, guid: 5215e539e30764640ae3821129a52138,
@@ -752,6 +766,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 18859652f9c885948842a09ac9d383da, type: 3}
   gameOverClip: {fileID: 8300000, guid: 1b334b9cca1137544bf32ffc46990f8b, type: 3}
   newHighScoreClip: {fileID: 8300000, guid: 63a2ef4ce51ac654e84be8cb4db70c9f, type: 3}
+  iconToggleSound: {fileID: 587390652}
   backgroundMusic: {fileID: 1791718833}
   iconToggleMusic: {fileID: 1763286539}
 --- !u!82 &712316304
@@ -1033,6 +1048,36 @@ PrefabInstance:
       propertyPath: m_Text
       value: SOUND
       objectReference: {fileID: 0}
+    - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 712316303}
+    - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToggleSound
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2881072177195794460, guid: 5215e539e30764640ae3821129a52138,
         type: 3}
       propertyPath: image
@@ -1235,6 +1280,19 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 378239360679050361}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1034077648 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2881072177195794460, guid: 5215e539e30764640ae3821129a52138,
+    type: 3}
+  m_PrefabInstance: {fileID: 1826879909}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_GeneratorAsset: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 4f5ade6f98c0e824da9915dcb8beb1d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1070664750
 GameObject:
   m_ObjectHideFlags: 0
@@ -4352,6 +4410,48 @@ PrefabInstance:
       propertyPath: m_Text
       value: ROTATE
       objectReference: {fileID: 0}
+    - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 453712908}
+    - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToggleRotation
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2881072177195794460, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: iconTrue
+      value: 
+      objectReference: {fileID: 21300000, guid: 163e0825ce958a04c8607c1519af2baf,
+        type: 3}
+    - target: {fileID: 2881072177195794460, guid: 5215e539e30764640ae3821129a52138,
+        type: 3}
+      propertyPath: iconFalse
+      value: 
+      objectReference: {fileID: 21300000, guid: 20e2df3136276a14a8eac3a58e40b4ee,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5215e539e30764640ae3821129a52138, type: 3}
 --- !u!1 &1837480463

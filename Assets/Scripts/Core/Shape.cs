@@ -4,6 +4,8 @@ using UnityEngine;
 
 public enum ShapeType { i, j, l, o, s, t, z}
 
+public enum Direction { left, right }
+
 public class Shape : MonoBehaviour {
 
     [SerializeField] bool canRotate = true;
@@ -29,15 +31,9 @@ public class Shape : MonoBehaviour {
         Move(new Vector3(0, -1, 0));
     }
 
-    public void RotateRight() {
+    public void Rotate(Direction direction) {
         if (canRotate) {
-            transform.Rotate(new Vector3(0, 0, -90));
-        }
-    }
-
-    public void RotateLeft() {
-        if (canRotate) {
-            transform.Rotate(new Vector3(0, 0, 90));
+            transform.Rotate(new Vector3(0, 0, 90 * (direction == Direction.left ? 1 : -1)));
         }
     }
 

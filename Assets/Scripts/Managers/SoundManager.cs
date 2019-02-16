@@ -10,12 +10,14 @@ public class SoundManager : MonoBehaviour {
     [SerializeField] AudioClip[] fullLinesClip = null;
     [SerializeField] AudioClip gameOverClip = null;
     [SerializeField] AudioClip newHighScoreClip = null;
+    [SerializeField] IconToggle iconToggleSound = null;
     [Header("Background")]
     [SerializeField] AudioSource backgroundMusic = null;
-    [SerializeField] IconToggle iconToggleMusic;
+    [SerializeField] IconToggle iconToggleMusic = null;
 
     AudioSource audioSource = null;
     bool musicToggledOff = false;
+    bool soundToggledOff = false;
     bool gamePaused = false;
 
     void Start() {
@@ -25,20 +27,36 @@ public class SoundManager : MonoBehaviour {
     }
 
     public void PlayClipShapeLands() {
-        audioSource.PlayOneShot(shapeLandsClip);
+        if (!soundToggledOff) {
+            audioSource.PlayOneShot(shapeLandsClip);
+        }
     }
 
     public void PlayFullLinesClip(int index) {
-        audioSource.PlayOneShot(fullLinesClip[index]);
+        if (!soundToggledOff) {
+            audioSource.PlayOneShot(fullLinesClip[index]);
+        }
     }
 
     public void PlayGameOverClip() {
-        audioSource.PlayOneShot(gameOverClip);
+        if (!soundToggledOff) {
+            audioSource.PlayOneShot(gameOverClip);
+        }
     }
 
     public void PlayNewHighScoreClip() {
-        audioSource.clip = newHighScoreClip;
-        audioSource.PlayDelayed(gameOverClip.length + 1f);
+        if (!soundToggledOff) {
+            audioSource.clip = newHighScoreClip;
+            audioSource.PlayDelayed(gameOverClip.length + 1f);
+        }
+    }
+
+    public void ToggleSound() {
+        if (gamePaused) {
+            return;
+        }
+        soundToggledOff = !soundToggledOff;
+        iconToggleSound.ToggleIcon(!soundToggledOff);
     }
 
     public void PlayBackgroundMusic(bool status) {
