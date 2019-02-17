@@ -6,19 +6,20 @@ using UnityEngine.UI;
 public class TouchController : MonoBehaviour {
 
     [SerializeField] int minSwipeDistance = 20;
-    [SerializeField] Text diagnosticText1; 
-    [SerializeField] Text diagnosticText2;
+    [SerializeField] Text diagnosticText1 = null; 
+    [SerializeField] Text diagnosticText2 = null;
     [SerializeField] bool useDiagnostic = false;
 
-    public delegate void TouchEventHandler(Vector2 swipe);
+    public delegate void TouchEventHandler (Vector2 swipe);
     public static event TouchEventHandler SwipeEvent;
+    public static event TouchEventHandler SwipeEndEvent;
 
     Vector2 touchMovement;
 
     void Start() {
         Diagnostic("", "");
     }
-
+     
     void Update() {
         if (Input.touchCount > 0) {
             Touch touch = Input.touches[0];
@@ -31,6 +32,8 @@ public class TouchController : MonoBehaviour {
                     OnSwipe();
                     Diagnostic("Swipe detected", touchMovement.ToString() + " " + SwipeDiagnostic(touchMovement));
                 }
+            } else if (touch.phase == TouchPhase.Ended) {
+                OnSwipeEnd();
             }
         }
     }
@@ -38,6 +41,12 @@ public class TouchController : MonoBehaviour {
     void OnSwipe() {
         if (SwipeEvent != null) {
             SwipeEvent(touchMovement);
+        }
+    }
+
+    void OnSwipeEnd() {
+        if (SwipeEndEvent != null) {
+            SwipeEndEvent(touchMovement);
         }
     }
 

@@ -323,13 +323,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 2
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 2
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Text 2
 --- !u!222 &357537141
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -352,11 +352,11 @@ RectTransform:
   m_Father: {fileID: 280336402}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 10, y: -60}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -10, y: -100}
   m_SizeDelta: {x: 200, y: 30}
-  m_Pivot: {x: 0, y: 0.5}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!1 &412793488
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,8 +474,8 @@ MonoBehaviour:
   panelManager: {fileID: 8148565159737337841}
   dropDownNormalSpeed: 0.5
   dropDownFastSpeed: 0.01
-  keyRepeatStart: 0.25
-  keyRepeatRate: 0.025
+  keyRepeatStart: 1
+  keyRepeatRate: 1
   iconToggleRotation: {fileID: 1034077648}
   levelUpAfterCompletedLines: 10
   speedIncreaseFactorPerLevel: 0.01
@@ -1523,7 +1523,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Text 1
 --- !u!224 &1212820172 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7208150654766498310, guid: 5215e539e30764640ae3821129a52138,
@@ -4135,7 +4135,7 @@ MonoBehaviour:
   minSwipeDistance: 20
   diagnosticText1: {fileID: 1096686654}
   diagnosticText2: {fileID: 357537140}
-  useDiagnostic: 1
+  useDiagnostic: 0
 --- !u!1 &1708328493
 GameObject:
   m_ObjectHideFlags: 0
@@ -4348,7 +4348,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: c918e8c62c2f47846af85f6e9aea03b7, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0

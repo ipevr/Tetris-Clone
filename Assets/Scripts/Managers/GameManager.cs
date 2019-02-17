@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour {
     float timeToDrop = 0f;
     int linesCompletedOverAll = 0;
     bool gameOver = false;
-    bool fastDropRequired = false;
     float timeToNextKey = 0;
     float timeToRepeat = 0;
     bool keyRepeatStarted = false;
@@ -47,7 +46,10 @@ public class GameManager : MonoBehaviour {
     int totalScore = 0;
     bool paused = false;
     bool rotationLeft = true;
-
+    bool fastDropAllowed = true;
+    Direction swipeDirection = Direction.none;
+    Direction swipeEndDirection = Direction.none;
+    
     void Start() {
         soundManager = FindObjectOfType<SoundManager>();
         if (resetHighScore) {
@@ -60,7 +62,7 @@ public class GameManager : MonoBehaviour {
             if (!activeShape) {
                 activeShape = spawner.SpawnShape();
             } else {
-                DropDownOverTime();
+                MoveDown(false);
                 CheckForInput();
             }
         } else if (gameOver) {
@@ -68,6 +70,16 @@ public class GameManager : MonoBehaviour {
         } else if (paused) {
             CheckForInputGamePaused();
         }
+    }
+
+    void OnEnable() {
+        TouchController.SwipeEvent += SwipeHandler;
+        TouchController.SwipeEndEvent += SwipeEndHandler;
+    }
+
+    void OnDisable() {
+        TouchController.SwipeEvent -= SwipeHandler;
+        TouchController.SwipeEndEvent -= SwipeEndHandler;
     }
 
     public void PauseResumeGame() {
@@ -81,55 +93,106 @@ public class GameManager : MonoBehaviour {
         iconToggleRotation.ToggleIcon(rotationLeft);
     }
 
+    void SwipeHandler(Vector2 swipe) {
+        swipeDirection = GetDirection(swipe);
+    }
+
+    void SwipeEndHandler(Vector2 swipe) {
+        swipeEndDirection = GetDirection(swipe);
+    }
+
     void CheckForInput() {
+        CheckForButtonRotate();
         CheckForButtonDown();
         CheckForButtonsLeftRight();
         CheckForExtraButtons();
     }
 
-    void CheckForButtonDown() {
+    void CheckForButtonRotate() {
         if (Input.GetButtonDown(BUTTON_ROTATE)) {
-            activeShape.Rotate(rotationLeft ? Direction.left : Direction.right);
-            if (!board.HasShapeValidPosition(activeShape)) {
-                activeShape.Rotate(rotationLeft ? Direction.right : Direction.left);
-            }
+            Rotate();
+        } else if (swipeEndDirection == Direction.up) {
+            Rotate();
+            swipeDirection = Direction.none;
+            swipeEndDirection = Direction.none;
         }
-        if (Input.GetButtonDown(BUTTON_DOWN)) {
+    }
+
+    void CheckForButtonDown() {
+        if (fastDropAllowed && Input.GetButton(BUTTON_DOWN)) {
             timeToDrop = Time.time;
-            fastDropRequired = true;
-            DropDownOverTime();
+            MoveDown(true);
+        } else if (Input.GetButtonUp(BUTTON_DOWN)) {
+            fastDropAllowed = true;
+            MoveDown(false);
+        } else if (fastDropAllowed && swipeDirection == Direction.down) {
+            timeToDrop = Time.time;
+            MoveDown(true);
+            swipeDirection = Direction.none;
+            swipeEndDirection = Direction.none;
+        } else if (swipeEndDirection == Direction.down) {
+            fastDropAllowed = true;
+            MoveDown(false);
         }
-        if (Input.GetButtonUp(BUTTON_DOWN)) {
-            fastDropRequired = false;
-            DropDownOverTime();
+    }
+
+    void MoveDown(bool fastDrop) {
+        if (Time.time > timeToDrop) {
+            activeShape.MoveDown();
+            timeToDrop = Time.time + (fastDrop ? dropDownFastSpeed : dropDownNormalSpeed);
+            if (!board.HasShapeValidPosition(activeShape)) {
+                SpawnNewShapeWhenPlaced();
+                fastDropAllowed = false;
+            }
         }
     }
 
     void CheckForButtonsLeftRight() {
         if (Input.GetButton(BUTTON_LEFT) && Time.time > timeToRepeat && Time.time > timeToNextKey || Input.GetButtonDown(BUTTON_LEFT)) {
-            if (!keyRepeatStarted) {
-                timeToRepeat = Time.time + keyRepeatStart;
-                keyRepeatStarted = true;
-            }
-            timeToNextKey = Time.time + keyRepeatRate;
-            activeShape.MoveLeft();
-            if (!board.HasShapeValidPosition(activeShape)) {
-                activeShape.MoveRight();
-            }
-        }
-        if (Input.GetButton(BUTTON_RIGHT) && Time.time > timeToRepeat && Time.time > timeToNextKey || Input.GetButtonDown(BUTTON_RIGHT)) {
-            if (!keyRepeatStarted) {
-                timeToRepeat = Time.time + keyRepeatStart;
-                keyRepeatStarted = true;
-            }
-            timeToNextKey = Time.time + keyRepeatRate;
-            activeShape.MoveRight();
-            if (!board.HasShapeValidPosition(activeShape)) {
-                activeShape.MoveLeft();
-            }
-        }
-        if (Input.GetButtonUp(BUTTON_LEFT) || Input.GetButtonUp(BUTTON_RIGHT)) {
+            MoveLeft();
+        } else if (swipeDirection == Direction.left && Time.time > timeToRepeat && Time.time > timeToNextKey || swipeEndDirection == Direction.left) {
+            MoveLeft();
+            swipeDirection = Direction.none;
+            swipeEndDirection = Direction.none;
+        } else if (Input.GetButton(BUTTON_RIGHT) && Time.time > timeToRepeat && Time.time > timeToNextKey || Input.GetButtonDown(BUTTON_RIGHT)) {
+            MoveRight();
+        } else if (swipeDirection == Direction.right && Time.time > timeToRepeat && Time.time > timeToNextKey || swipeEndDirection == Direction.right) {
+            MoveRight();
+            swipeDirection = Direction.none;
+            swipeEndDirection = Direction.none;
+        } else if (Input.GetButtonUp(BUTTON_LEFT) || Input.GetButtonUp(BUTTON_RIGHT)) {
             keyRepeatStarted = false;
+        }
+    }
+
+    void Rotate() {
+        activeShape.Rotate(rotationLeft ? Direction.left : Direction.right);
+        if (!board.HasShapeValidPosition(activeShape)) {
+            activeShape.Rotate(rotationLeft ? Direction.right : Direction.left);
+        }
+    }
+
+    void MoveRight() {
+        if (!keyRepeatStarted) {
+            timeToRepeat = Time.time + keyRepeatStart;
+            keyRepeatStarted = true;
+        }
+        timeToNextKey = Time.time + keyRepeatRate;
+        activeShape.MoveRight();
+        if (!board.HasShapeValidPosition(activeShape)) {
+            activeShape.MoveLeft();
+        }
+    }
+
+    void MoveLeft() {
+        if (!keyRepeatStarted) {
+            timeToRepeat = Time.time + keyRepeatStart;
+            keyRepeatStarted = true;
+        }
+        timeToNextKey = Time.time + keyRepeatRate;
+        activeShape.MoveLeft();
+        if (!board.HasShapeValidPosition(activeShape)) {
+            activeShape.MoveRight();
         }
     }
 
@@ -164,18 +227,8 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void DropDownOverTime() {
-        if (Time.time > timeToDrop) {
-            activeShape.MoveDown();
-            timeToDrop = Time.time + (fastDropRequired ? dropDownFastSpeed : dropDownNormalSpeed);
-            if (!board.HasShapeValidPosition(activeShape)) {
-                SpawnNewShapeWhenPlaced();
-            }
-        }
-    }
-
     void SpawnNewShapeWhenPlaced() {
-        fastDropRequired = false;
+        //fastDropRequired = false;
         activeShape.MoveUp();
         soundManager.PlayClipShapeLands();
         totalScore += shapeLandScore;
@@ -226,5 +279,15 @@ public class GameManager : MonoBehaviour {
             panelManager.SetLevelToNumber(actualLevel);
             dropDownNormalSpeed *= 1f - actualLevel * speedIncreaseFactorPerLevel;
         }
+    }
+
+    Direction GetDirection(Vector2 swipeMovement) {
+        Direction swipeDirection = Direction.none;
+        if (Mathf.Abs(swipeMovement.x) >= Mathf.Abs(swipeMovement.y)) {
+            swipeDirection = (swipeMovement.x >= 0) ? Direction.right : Direction.left;
+        } else {
+            swipeDirection = (swipeMovement.y >= 0) ? Direction.up : Direction.down;
+        }
+        return swipeDirection;
     }
 }

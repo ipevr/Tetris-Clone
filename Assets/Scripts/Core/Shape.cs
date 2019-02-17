@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum ShapeType { i, j, l, o, s, t, z}
 
-public enum Direction { left, right }
+public enum Direction { none, left, right, up, down}
 
 public class Shape : MonoBehaviour {
 
