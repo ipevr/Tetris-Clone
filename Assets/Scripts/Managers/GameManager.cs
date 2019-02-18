@@ -39,8 +39,8 @@ public class GameManager : MonoBehaviour {
     float timeToDrop = 0f;
     int linesCompletedOverAll = 0;
     bool gameOver = false;
-    float timeToNextKey = 0;
     float timeToRepeat = 0;
+    float swipeStart = 0f;
     bool keyRepeatStarted = false;
     int actualLevel = 1;
     int totalScore = 0;
@@ -93,18 +93,29 @@ public class GameManager : MonoBehaviour {
         iconToggleRotation.ToggleIcon(rotationLeft);
     }
 
+    public void PlayAgain() {
+        SceneManager.LoadScene(0);
+    }
+
+    public void ExitGame() {
+        Application.Quit();
+        Debug.Log("Quit Application requested");
+    }
+
     void SwipeHandler(Vector2 swipe) {
         swipeDirection = GetDirection(swipe);
     }
 
     void SwipeEndHandler(Vector2 swipe) {
         swipeEndDirection = GetDirection(swipe);
+        Debug.Log("SwipeEndDirection " + swipeEndDirection);
     }
 
     void CheckForInput() {
         CheckForButtonRotate();
         CheckForButtonDown();
         CheckForButtonsLeftRight();
+        CheckForSwipesLeftRight();
         CheckForExtraButtons();
     }
 
@@ -148,21 +159,27 @@ public class GameManager : MonoBehaviour {
     }
 
     void CheckForButtonsLeftRight() {
-        if (Input.GetButton(BUTTON_LEFT) && Time.time > timeToRepeat && Time.time > timeToNextKey || Input.GetButtonDown(BUTTON_LEFT)) {
+        if (Input.GetButton(BUTTON_LEFT) && Time.time > timeToRepeat || Input.GetButtonDown(BUTTON_LEFT)) {
             MoveLeft();
-        } else if (swipeDirection == Direction.left && Time.time > timeToRepeat && Time.time > timeToNextKey || swipeEndDirection == Direction.left) {
-            MoveLeft();
-            swipeDirection = Direction.none;
-            swipeEndDirection = Direction.none;
-        } else if (Input.GetButton(BUTTON_RIGHT) && Time.time > timeToRepeat && Time.time > timeToNextKey || Input.GetButtonDown(BUTTON_RIGHT)) {
+        } else if (Input.GetButton(BUTTON_RIGHT) && Time.time > timeToRepeat || Input.GetButtonDown(BUTTON_RIGHT)) {
             MoveRight();
-        } else if (swipeDirection == Direction.right && Time.time > timeToRepeat && Time.time > timeToNextKey || swipeEndDirection == Direction.right) {
-            MoveRight();
-            swipeDirection = Direction.none;
-            swipeEndDirection = Direction.none;
         } else if (Input.GetButtonUp(BUTTON_LEFT) || Input.GetButtonUp(BUTTON_RIGHT)) {
             keyRepeatStarted = false;
         }
+    }
+
+    void CheckForSwipesLeftRight() {
+        if (swipeDirection == Direction.left && Time.time > timeToRepeat) {
+            MoveLeft();
+        } else if (swipeDirection == Direction.right && Time.time > timeToRepeat) {
+            MoveRight();
+        }
+        if (swipeEndDirection == Direction.left || swipeEndDirection == Direction.right) {
+            keyRepeatStarted = false;
+            timeToRepeat = Time.time;
+        }
+        swipeDirection = Direction.none;
+        swipeEndDirection = Direction.none;
     }
 
     void Rotate() {
@@ -176,8 +193,9 @@ public class GameManager : MonoBehaviour {
         if (!keyRepeatStarted) {
             timeToRepeat = Time.time + keyRepeatStart;
             keyRepeatStarted = true;
+        } else {
+            timeToRepeat = Time.time + keyRepeatRate;
         }
-        timeToNextKey = Time.time + keyRepeatRate;
         activeShape.MoveRight();
         if (!board.HasShapeValidPosition(activeShape)) {
             activeShape.MoveLeft();
@@ -188,8 +206,9 @@ public class GameManager : MonoBehaviour {
         if (!keyRepeatStarted) {
             timeToRepeat = Time.time + keyRepeatStart;
             keyRepeatStarted = true;
+        } else {
+            timeToRepeat = Time.time + keyRepeatRate;
         }
-        timeToNextKey = Time.time + keyRepeatRate;
         activeShape.MoveLeft();
         if (!board.HasShapeValidPosition(activeShape)) {
             activeShape.MoveRight();
@@ -213,11 +232,10 @@ public class GameManager : MonoBehaviour {
 
     void CheckForInputGameOver() {
         if (Input.GetButtonDown(BUTTON_PLAY_AGAIN)) {
-            SceneManager.LoadScene(0);
+            PlayAgain();
         }
         if (Input.GetButtonDown(BUTTON_EXIT_GAME)) {
-            Application.Quit();
-            Debug.Log("Quit Application requested");
+            ExitGame();
         }
     }
 
