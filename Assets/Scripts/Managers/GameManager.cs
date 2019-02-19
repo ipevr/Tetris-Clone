@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour {
     bool fastDropAllowed = true;
     float dropDownNormalTime = 0;
     float dropDownFastTime = 0;
+    float dropDownSpeed = 0;
     Direction swipeDirection = Direction.none;
     Direction swipeEndDirection = Direction.none;
     
@@ -55,6 +56,7 @@ public class GameManager : MonoBehaviour {
         soundManager = FindObjectOfType<SoundManager>();
         dropDownNormalTime = 1f / startDropDownSpeed;
         dropDownFastTime = 1f / dropDownFastSpeed;
+        dropDownSpeed = startDropDownSpeed;
         if (resetHighScore) {
             ScoreManager.ResetHighScore();
         }
@@ -78,11 +80,13 @@ public class GameManager : MonoBehaviour {
     void OnEnable() {
         TouchController.SwipeEvent += SwipeHandler;
         TouchController.SwipeEndEvent += SwipeEndHandler;
+        Board.OnLineDeletedEvent += OnLineDeletedHandler;
     }
 
     void OnDisable() {
         TouchController.SwipeEvent -= SwipeHandler;
         TouchController.SwipeEndEvent -= SwipeEndHandler;
+        Board.OnLineDeletedEvent -= OnLineDeletedHandler;
     }
 
     public void PauseResumeGame() {
@@ -112,6 +116,14 @@ public class GameManager : MonoBehaviour {
     void SwipeEndHandler(Vector2 swipe) {
         swipeEndDirection = GetDirection(swipe);
         Debug.Log("SwipeEndDirection " + swipeEndDirection);
+    }
+
+    void OnLineDeletedHandler(int amount) {
+        linesCompletedOverAll++;
+        panelManager.SetLinesToNumber(linesCompletedOverAll);
+        CheckForLevelUp();
+        totalScore += fullLineScore[amount - 1];
+        panelManager.ShowFlyingScore(fullLineScore[amount - 1], amount == 4 ? true : false);
     }
 
     void CheckForInput() {
@@ -257,7 +269,7 @@ public class GameManager : MonoBehaviour {
         if (!gameOver) {
             board.StoreShapeInGrid(activeShape);
             activeShape = spawner.SpawnShape();
-            CheckForFullLines();
+            board.RemoveFullLines();
         } else {
             HandleGameOver();
         }
@@ -277,29 +289,12 @@ public class GameManager : MonoBehaviour {
         soundManager.PlayGameOverClip();
     }
 
-    void CheckForFullLines() {
-        int linesCompleted = board.RemoveFullLines();
-        if (linesCompleted > 0) {
-            ManageCompletedLines(linesCompleted);
-        }
-    }
-
-    void ManageCompletedLines(int linesCompleted) {
-        Debug.Log("lines completed " + linesCompleted);
-        for (int i = 1; i <= linesCompleted; i++) {
-            linesCompletedOverAll++;
-            panelManager.SetLinesToNumber(linesCompletedOverAll);
-            CheckForLevelUp();
-        }
-        totalScore += fullLineScore[linesCompleted - 1];
-        panelManager.ShowFlyingScore(fullLineScore[linesCompleted - 1], linesCompleted == 4 ? true : false);
-    }
-
     void CheckForLevelUp() {
         if (linesCompletedOverAll % levelUpAfterCompletedLines == 0) {
             actualLevel++;
             panelManager.SetLevelToNumber(actualLevel);
-            dropDownNormalTime += 1f / speedIncreasePerLevel;
+            dropDownSpeed += speedIncreasePerLevel;
+            dropDownNormalTime = 1f / dropDownSpeed;
         }
     }
 

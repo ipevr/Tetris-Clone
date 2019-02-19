@@ -536,13 +536,13 @@ MonoBehaviour:
   board: {fileID: 1070664751}
   spawner: {fileID: 4772804422092447089}
   panelManager: {fileID: 8148565159737337841}
-  dropDownNormalSpeed: 0.5
-  dropDownFastSpeed: 0.01
+  startDropDownSpeed: 2
+  dropDownFastSpeed: 100
   keyRepeatStart: 0.25
   keyRepeatRate: 0.05
   iconToggleRotation: {fileID: 1034077648}
   levelUpAfterCompletedLines: 10
-  speedIncreaseFactorPerLevel: 0.01
+  speedIncreasePerLevel: 0.2
   shapeLandScore: 10
   fullLineScore: 320000007d000000c800000090010000
   resetHighScore: 0

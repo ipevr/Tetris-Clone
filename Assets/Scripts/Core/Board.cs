@@ -16,6 +16,9 @@ public class Board : MonoBehaviour
     Transform[,] grid;
     int numberOfFullLines = 0;
 
+    public delegate void OnLineDeleted(int amountOfDeletedLinesAtOnce);
+    public static event OnLineDeleted OnLineDeletedEvent;
+
     void Awake() {
         grid = new Transform[width, absoluteHeight];
     }
@@ -57,15 +60,8 @@ public class Board : MonoBehaviour
         return false;
     }
 
-    public int RemoveFullLines() {
-        numberOfFullLines = 0;
-        for (int y = 0; y < absoluteHeight; y++) {
-            if (LineIsComplete(y)) {
-                numberOfFullLines++;
-            }
-        }
+    public void RemoveFullLines() {
         StartCoroutine(RemoveFullLinesStepByStep());
-        return numberOfFullLines;
     }
 
     public void PutShapesToLayername(string name) {
@@ -129,13 +125,14 @@ public class Board : MonoBehaviour
     }
 
     IEnumerator RemoveFullLinesStepByStep() {
-        int clipNumber = 0;
+        int amountOfDeletedLines = 0;
         for (int y = 0; y < absoluteHeight; y++) {
             if (LineIsComplete(y)) {
                 DeleteLine(y);
                 y--;
-                soundManager.PlayFullLinesClip(clipNumber);
-                clipNumber++;
+                soundManager.PlayFullLinesClip(amountOfDeletedLines);
+                amountOfDeletedLines++;
+                OnLineDeletedEvent(amountOfDeletedLines);
                 yield return new WaitForSeconds(timeToWaitAfterLineDeleted);
                 MoveDownAllLinesFrom(y + 1);
             }
