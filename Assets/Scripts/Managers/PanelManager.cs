@@ -17,6 +17,7 @@ public class PanelManager : MonoBehaviour
     [SerializeField] Text highScoreText = null;
     [SerializeField] Text highScoreLabel = null;
     [SerializeField] Text flyingScoreText = null;
+    [SerializeField] Text pausedHighScoreText = null;
     [SerializeField] float timeShowingFlyingScore = 2f;
     [SerializeField] float flyingScoreEndPosition = 300f;
     [SerializeField] Color[] flyingScoreColors = new Color[] { };
@@ -36,6 +37,7 @@ public class PanelManager : MonoBehaviour
         panelPaused.SetActive(false);
         linesText.text = "0";
         levelText.text = "1";
+        pausedHighScoreText.text = ScoreManager.GetHighScore().ToString();
         originalPositionFlyingScore = flyingScoreText.transform.position;
         flyingScoreText.fontSize = noramlFontSizeFlyingScore;
         flyingScoreText.enabled = false;

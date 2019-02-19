@@ -21,14 +21,14 @@ public class GameManager : MonoBehaviour {
     [SerializeField] Spawner spawner = null;
     [SerializeField] PanelManager panelManager = null;
     [Header("Input")]
-    [SerializeField] float dropDownNormalSpeed = .5f;
-    [SerializeField] float dropDownFastSpeed = .05f;
+    [SerializeField] float startDropDownSpeed = 2f;
+    [SerializeField] float dropDownFastSpeed = 100f;
     [SerializeField] float keyRepeatStart = .5f;
     [SerializeField] float keyRepeatRate = .25f;
     [SerializeField] IconToggle iconToggleRotation = null;
     [Header("Level Up")]
     [SerializeField] int levelUpAfterCompletedLines = 10;
-    [SerializeField] float speedIncreaseFactorPerLevel = .1f;
+    [SerializeField] float speedIncreasePerLevel = .5f;
     [Header("Score")]
     [SerializeField] int shapeLandScore = 10;
     [SerializeField] int[] fullLineScore = new int[4];
@@ -40,18 +40,21 @@ public class GameManager : MonoBehaviour {
     int linesCompletedOverAll = 0;
     bool gameOver = false;
     float timeToRepeat = 0;
-    float swipeStart = 0f;
     bool keyRepeatStarted = false;
     int actualLevel = 1;
     int totalScore = 0;
     bool paused = false;
     bool rotationLeft = true;
     bool fastDropAllowed = true;
+    float dropDownNormalTime = 0;
+    float dropDownFastTime = 0;
     Direction swipeDirection = Direction.none;
     Direction swipeEndDirection = Direction.none;
     
     void Start() {
         soundManager = FindObjectOfType<SoundManager>();
+        dropDownNormalTime = 1f / startDropDownSpeed;
+        dropDownFastTime = 1f / dropDownFastSpeed;
         if (resetHighScore) {
             ScoreManager.ResetHighScore();
         }
@@ -150,7 +153,7 @@ public class GameManager : MonoBehaviour {
     void MoveDown(bool fastDrop) {
         if (Time.time > timeToDrop) {
             activeShape.MoveDown();
-            timeToDrop = Time.time + (fastDrop ? dropDownFastSpeed : dropDownNormalSpeed);
+            timeToDrop = Time.time + (fastDrop ? dropDownFastTime : dropDownNormalTime);
             if (!board.HasShapeValidPosition(activeShape)) {
                 SpawnNewShapeWhenPlaced();
                 fastDropAllowed = false;
@@ -282,6 +285,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void ManageCompletedLines(int linesCompleted) {
+        Debug.Log("lines completed " + linesCompleted);
         for (int i = 1; i <= linesCompleted; i++) {
             linesCompletedOverAll++;
             panelManager.SetLinesToNumber(linesCompletedOverAll);
@@ -295,7 +299,7 @@ public class GameManager : MonoBehaviour {
         if (linesCompletedOverAll % levelUpAfterCompletedLines == 0) {
             actualLevel++;
             panelManager.SetLevelToNumber(actualLevel);
-            dropDownNormalSpeed *= 1f - actualLevel * speedIncreaseFactorPerLevel;
+            dropDownNormalTime += 1f / speedIncreasePerLevel;
         }
     }
 

@@ -58,6 +58,12 @@ public class Board : MonoBehaviour
     }
 
     public int RemoveFullLines() {
+        numberOfFullLines = 0;
+        for (int y = 0; y < absoluteHeight; y++) {
+            if (LineIsComplete(y)) {
+                numberOfFullLines++;
+            }
+        }
         StartCoroutine(RemoveFullLinesStepByStep());
         return numberOfFullLines;
     }
@@ -123,13 +129,13 @@ public class Board : MonoBehaviour
     }
 
     IEnumerator RemoveFullLinesStepByStep() {
-        numberOfFullLines = 0;
+        int clipNumber = 0;
         for (int y = 0; y < absoluteHeight; y++) {
             if (LineIsComplete(y)) {
-                numberOfFullLines++;
                 DeleteLine(y);
                 y--;
-                soundManager.PlayFullLinesClip(numberOfFullLines - 1);
+                soundManager.PlayFullLinesClip(clipNumber);
+                clipNumber++;
                 yield return new WaitForSeconds(timeToWaitAfterLineDeleted);
                 MoveDownAllLinesFrom(y + 1);
             }
