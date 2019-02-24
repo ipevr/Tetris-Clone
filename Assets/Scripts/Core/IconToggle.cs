@@ -11,8 +11,7 @@ public class IconToggle : MonoBehaviour {
     [SerializeField] bool defualtIconState = true;
     Image image;
 
-
-    void Start() {
+    void Awake() {
         image = GetComponent<Image>();
         image.sprite = defualtIconState ? iconTrue : iconFalse;
     }

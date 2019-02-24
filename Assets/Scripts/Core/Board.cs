@@ -14,7 +14,6 @@ public class Board : MonoBehaviour
 
     SoundManager soundManager;
     Transform[,] grid;
-    int numberOfFullLines = 0;
 
     public delegate void OnLineDeleted(int amountOfDeletedLinesAtOnce);
     public static event OnLineDeleted OnLineDeletedEvent;
@@ -27,7 +26,7 @@ public class Board : MonoBehaviour
         soundManager = FindObjectOfType<SoundManager>();
     }
 
-    public bool HasShapeValidPosition(Shape shape) {
+    public bool ShapeInValidPosition(Shape shape) {
         foreach(Transform child in shape.transform) {
             Vector2Int pos = Vector2Int.RoundToInt(child.position);
             if (!IsWithinBoard(pos.x, pos.y) || !IsInFreeGrid(pos.x, pos.y)) {

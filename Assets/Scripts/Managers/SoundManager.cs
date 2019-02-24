@@ -5,6 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour {
 
+    [Header("Inputs")]
+    [SerializeField] AudioClip shapeMoveLeftRightClip = null;
+    [SerializeField] AudioClip shapeRotateClip = null;
+    [SerializeField] AudioClip shapeDropDownClip = null;
     [Header("Effects")]
     [SerializeField] AudioClip shapeLandsClip = null;
     [SerializeField] AudioClip[] fullLinesClip = null;
@@ -24,6 +28,24 @@ public class SoundManager : MonoBehaviour {
         audioSource = GetComponent<AudioSource>();
         backgroundMusic.loop = true;
         backgroundMusic.Play();
+    }
+
+    public void PlayClipShapeMoveLeftRight() {
+        if (!soundToggledOff) {
+            audioSource.PlayOneShot(shapeMoveLeftRightClip);
+        }
+    }
+
+    public void PlayClipShapeRotate() {
+        if (!soundToggledOff) {
+            audioSource.PlayOneShot(shapeRotateClip);
+        }
+    }
+
+    public void PlayClipShapeDropDown() {
+        if (!soundToggledOff) {
+            audioSource.PlayOneShot(shapeDropDownClip);
+        }
     }
 
     public void PlayClipShapeLands() {
@@ -60,6 +82,7 @@ public class SoundManager : MonoBehaviour {
     }
 
     public void PlayBackgroundMusic(bool status) {
+        backgroundMusic.mute = false;
         gamePaused = status ? false : true;
         if (status && !musicToggledOff) {
             backgroundMusic.UnPause();
@@ -69,6 +92,7 @@ public class SoundManager : MonoBehaviour {
     }
 
     public void ToggleBackgroundMusic() {
+        backgroundMusic.mute = false;
         if (gamePaused) {
             return;
         }
@@ -80,5 +104,11 @@ public class SoundManager : MonoBehaviour {
             backgroundMusic.Pause();
             iconToggleMusic.ToggleIcon(false);
         }
+    }
+
+    public void MuteBackGroundMusic(bool status) {
+        backgroundMusic.mute = status;
+        iconToggleMusic.ToggleIcon(!status);
+        musicToggledOff = status;
     }
 }

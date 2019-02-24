@@ -5,16 +5,20 @@ using UnityEngine.UI;
 
 public class TouchController : MonoBehaviour {
 
-    [SerializeField] int minSwipeDistance = 20;
+    [SerializeField] int minDragDistance = 100;
+    [SerializeField] int minSwipeDistance = 200;
+    [SerializeField] float tapTimeWindow = 0.1f;
     [SerializeField] Text diagnosticText1 = null; 
     [SerializeField] Text diagnosticText2 = null;
     [SerializeField] bool useDiagnostic = false;
 
     public delegate void TouchEventHandler (Vector2 swipe);
+    public static event TouchEventHandler DragEvent;
     public static event TouchEventHandler SwipeEvent;
-    public static event TouchEventHandler SwipeEndEvent;
+    public static event TouchEventHandler TapEvent;
 
     Vector2 touchMovement;
+    float tapTimeMax = 0;
 
     void Start() {
         Diagnostic("", "");
@@ -25,16 +29,29 @@ public class TouchController : MonoBehaviour {
             Touch touch = Input.touches[0];
             if (touch.phase == TouchPhase.Began) {
                 touchMovement = Vector2.zero;
+                tapTimeMax = Time.time + tapTimeWindow;
                 Diagnostic("", "");
             } else if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary) {
                 touchMovement += touch.deltaPosition;
-                if (touchMovement.magnitude > minSwipeDistance) {
-                    OnSwipe();
-                    Diagnostic("Swipe detected", touchMovement.ToString() + " " + SwipeDiagnostic(touchMovement));
+                if (touchMovement.magnitude > minDragDistance) {
+                    OnDrag();
+                    Diagnostic("Drag detected", touchMovement.ToString() + " " + DragSwipeDiagnostic(touchMovement));
                 }
             } else if (touch.phase == TouchPhase.Ended) {
-                OnSwipeEnd();
+                if (touchMovement.magnitude > minSwipeDistance) {
+                    OnSwipe();
+                    Diagnostic("Swipe detected", touchMovement.ToString() + " " + DragSwipeDiagnostic(touchMovement));
+                } else if (Time.time <= tapTimeMax) {
+                    OnTap();
+                    Diagnostic("Tap detected", touchMovement.ToString() + " " + DragSwipeDiagnostic(touchMovement));
+                }
             }
+        }
+    }
+
+    void OnDrag() {
+        if (DragEvent != null) {
+            DragEvent(touchMovement);
         }
     }
 
@@ -44,9 +61,9 @@ public class TouchController : MonoBehaviour {
         }
     }
 
-    void OnSwipeEnd() {
-        if (SwipeEndEvent != null) {
-            SwipeEndEvent(touchMovement);
+    void OnTap() {
+        if (TapEvent != null) {
+            TapEvent(touchMovement);
         }
     }
 
@@ -59,13 +76,12 @@ public class TouchController : MonoBehaviour {
         }
     }
 
-    string SwipeDiagnostic(Vector2 swipeMovement) {
+    string DragSwipeDiagnostic(Vector2 swipeMovement) {
         string direction = "";
-
-        // horizontal
-        if (Mathf.Abs(swipeMovement.x) > Mathf.Abs(swipeMovement.y)) {
+        bool isHorizontalSwipe = Mathf.Abs(swipeMovement.x) > Mathf.Abs(swipeMovement.y);
+        if (isHorizontalSwipe) {
             direction = (swipeMovement.x >= 0) ? "right" : "left";
-        } else { //vertical
+        } else {
             direction = (swipeMovement.y >= 0) ? "up" : "down";
         }
         return direction;
