@@ -5,8 +5,15 @@ using UnityEngine.UI;
 
 public class TouchController : MonoBehaviour {
 
+    const int ABSOLUTE_MIN_DRAG_DISTANCE = 50;
+    const int ABSOLUTE_MAX_DRAG_DISTANCE = 300;
+    const int ABSOLUTE_MIN_SWIPE_DISTANCE = 5;
+    const int ABSOLUTE_MAX_SWIPE_DISTANCE = 50;
+
+    [Range(ABSOLUTE_MIN_DRAG_DISTANCE, ABSOLUTE_MAX_DRAG_DISTANCE)]
     [SerializeField] int minDragDistance = 100;
-    [SerializeField] int minSwipeDistance = 200;
+    [Range(ABSOLUTE_MIN_SWIPE_DISTANCE, ABSOLUTE_MAX_SWIPE_DISTANCE)]
+    [SerializeField] int minSwipeDistance = 20;
     [SerializeField] float tapTimeWindow = 0.1f;
     [SerializeField] Text diagnosticText1 = null; 
     [SerializeField] Text diagnosticText2 = null;
@@ -19,6 +26,18 @@ public class TouchController : MonoBehaviour {
 
     Vector2 touchMovement;
     float tapTimeMax = 0;
+
+    public int GetAbsoluteMinDragDistance => ABSOLUTE_MIN_DRAG_DISTANCE;
+    public int GetAbsoluteMaxDragDistance => ABSOLUTE_MAX_DRAG_DISTANCE;
+    public int GetAbsoluteMinSwipeDistance => ABSOLUTE_MIN_SWIPE_DISTANCE;
+    public int GetAbsoluteMaxSwipeDistance => ABSOLUTE_MAX_SWIPE_DISTANCE;
+    public int GetSetMinSwipeDistance {
+        get { return minSwipeDistance; }
+        set { minSwipeDistance = value; } }
+    public int GetSetMinDragDistance {
+        get { return minDragDistance; }
+        set { minDragDistance = value; }
+    }
 
     void Start() {
         Diagnostic("", "");

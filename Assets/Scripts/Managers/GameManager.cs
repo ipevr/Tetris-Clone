@@ -184,7 +184,7 @@ public class GameManager : MonoBehaviour {
             Rotate();
             timeToNextSwipe = Time.time + minTimeToSwipe;
             tapped = false;
-        } else if (fastDropAllowed && dragDirection == Direction.down && Time.time > timeToDrop) {
+        } else if (fastDropAllowed && dragDirection == Direction.down) {
             fastDrop = true;
             timeToDrop = Time.time + (fastDrop ? dropDownFastTime : dropDownNormalTime);
             MoveDown();
