@@ -16,6 +16,10 @@ public class GameManager : MonoBehaviour {
     const string BUTTON_TOGGLE_ROTATION = "ToggleRotation";
     const string BUTTON_TOGGLE_MUSIC = "ToggleMusic";
     const string BUTTON_TOGGLE_SOUND = "ToggleSound";
+    const float ABSOLUTE_MIN_DRAG_TIME = .01f;
+    const float ABSOLUTE_MAX_DRAG_TIME = .5f;
+    const float ABSOLUTE_MIN_SWIPE_TIME = .05f;
+    const float ABSOLUTE_MAX_SWIPE_TIME = 1f;
 
     [SerializeField] Board board = null;
     [SerializeField] Spawner spawner = null;
@@ -27,9 +31,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField] float keyRepeatRate = .25f;
     [SerializeField] IconToggle iconToggleRotation = null;
     [Header("Touchscreen specific")]
-    [Range(0.05f, 1f)]
+    [Range(ABSOLUTE_MIN_DRAG_TIME, ABSOLUTE_MAX_DRAG_TIME)]
     [SerializeField] float minTimeToDrag = 0.15f;
-    [Range(0.05f, 1f)]
+    [Range(ABSOLUTE_MIN_SWIPE_TIME, ABSOLUTE_MAX_SWIPE_TIME)]
     [SerializeField] float minTimeToSwipe = 0.3f;
     [Header("Level Up")]
     [SerializeField] int levelUpAfterCompletedLines = 10;
@@ -62,6 +66,19 @@ public class GameManager : MonoBehaviour {
     Direction dragDirection = Direction.none;
     Direction swipeDirection = Direction.none;
     bool tapped = false;
+
+    public float GetAbsoluteMinDragTime => ABSOLUTE_MIN_DRAG_TIME;
+    public float GetAbsoluteMaxDragTime => ABSOLUTE_MAX_DRAG_TIME;
+    public float GetAbsoluteMinSwipeTime => ABSOLUTE_MIN_SWIPE_TIME;
+    public float GetAbsoluteMaxSwipeTime => ABSOLUTE_MAX_SWIPE_TIME;
+    public float GetSetMinDragTime {
+        get { return minTimeToDrag; }
+        set { minTimeToDrag = value; }
+    }
+    public float GetSetMinSwipeTime {
+        get { return minTimeToSwipe; }
+        set { minTimeToSwipe = value; }
+    }
     
     void Start() {
         soundManager = FindObjectOfType<SoundManager>();
@@ -69,7 +86,7 @@ public class GameManager : MonoBehaviour {
         dropDownFastTime = 1f / dropDownFastSpeed;
         dropDownSpeed = startDropDownSpeed;
         if (resetHighScore) {
-            ScoreManager.ResetHighScore();
+            ResetHighscore();
         }
         if (backGroundMusicMutedOnStart) {
             soundManager.MuteBackGroundMusic(true);
@@ -105,9 +122,11 @@ public class GameManager : MonoBehaviour {
     }
 
     public void PauseResumeGame() {
-        paused = !paused;
-        panelManager.ShowPausedPanel(paused);
-        soundManager.PlayBackgroundMusic(!paused);
+        StartCoroutine(TogglePauseAfterFrames(paused ? 1 : 0));
+    }
+
+    public void ResetHighscore() {
+        ScoreManager.ResetHighScore();
     }
 
     public void ToggleRotation() {
@@ -133,7 +152,9 @@ public class GameManager : MonoBehaviour {
     }
 
     void TapHandler(Vector2 tap) {
-        tapped = true;
+        if (!paused) {
+            tapped = true;
+        }
     }
 
     void OnLineDeletedHandler(int amount) {
@@ -312,5 +333,16 @@ public class GameManager : MonoBehaviour {
             swipeDirection = (swipeMovement.y >= 0) ? Direction.up : Direction.down;
         }
         return swipeDirection;
+    }
+
+    IEnumerator TogglePauseAfterFrames(int frames) {
+        // Coroutine for unpause the game to prevent a race condition with the tap event from TouchController --> lets the shape rotate on unpausing the game
+        for (int i = 0; i < frames; i++) {
+            yield return new WaitForEndOfFrame();
+        }
+        paused = !paused;
+        panelManager.ShowPausedPanel(paused);
+        soundManager.PlayBackgroundMusic(!paused);
+        yield return null; 
     }
 }

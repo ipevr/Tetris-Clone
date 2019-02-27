@@ -76,8 +76,10 @@ public class PanelManager : MonoBehaviour
         StartCoroutine(ShowFlyingScoreOverTime(score, superBonus));
     }
 
-    public void ShowHighScore() {
+    public void UpdateHighScore() {
         int highScore = ScoreManager.GetHighScore();
+        highScoreText.text = highScore.ToString();
+        pausedHighScoreText.text = highScore.ToString();
     }
 
     void SetFlyingScoreProperties(int score, bool superBonus) {

@@ -12,8 +12,10 @@ public class IconToggle : MonoBehaviour {
     Image image;
 
     void Awake() {
-        image = GetComponent<Image>();
-        image.sprite = defualtIconState ? iconTrue : iconFalse;
+        if (iconTrue || iconFalse) {
+            image = GetComponent<Image>();
+            image.sprite = defualtIconState ? iconTrue : iconFalse;
+        }
     }
 
     public void ToggleIcon(bool status) {

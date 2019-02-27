@@ -212,7 +212,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 127665071}
-        m_MethodName: UpdatePanel
+        m_MethodName: UpdateMinDragDistance
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -501,6 +501,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swipeDistanceSlider: {fileID: 1500322211}
   dragDistanceSlider: {fileID: 29791330}
+  dragSpeedSlider: {fileID: 551784571}
 --- !u!1 &280336398
 GameObject:
   m_ObjectHideFlags: 0
@@ -1567,7 +1568,18 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 127665071}
+        m_MethodName: UpdateDragSpeed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &587390652 stripped
@@ -3719,7 +3731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.12344251, g: 0.22816688, b: 0.3584906, a: 1}
+  m_Color: {r: 0.12344251, g: 0.22816688, b: 0.3584906, a: 0.58431375}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -6034,7 +6046,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 127665071}
-        m_MethodName: UpdatePanel
+        m_MethodName: UpdateMinSwipeDistance
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6494,8 +6506,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b117957aabac3d1408c09cf5b0ee68b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDragDistance: 150
-  minSwipeDistance: 20
+  minDragDistance: 200
+  minSwipeDistance: 10
   tapTimeWindow: 0.2
   diagnosticText1: {fileID: 1096686654}
   diagnosticText2: {fileID: 357537140}
@@ -7364,7 +7376,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1842145170}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 127665071}
+        m_MethodName: ResetHighscore
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1842145170
@@ -8023,7 +8046,7 @@ PrefabInstance:
     - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ExitGame
+      value: PauseResumeGame
       objectReference: {fileID: 0}
     - target: {fileID: 8458808160148425705, guid: 5215e539e30764640ae3821129a52138,
         type: 3}
