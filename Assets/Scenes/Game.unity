@@ -6511,7 +6511,7 @@ MonoBehaviour:
   tapTimeWindow: 0.2
   diagnosticText1: {fileID: 1096686654}
   diagnosticText2: {fileID: 357537140}
-  useDiagnostic: 1
+  useDiagnostic: 0
 --- !u!1 &1708328493
 GameObject:
   m_ObjectHideFlags: 0
