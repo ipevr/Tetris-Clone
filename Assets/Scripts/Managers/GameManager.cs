@@ -180,11 +180,9 @@ public class GameManager : MonoBehaviour {
             MoveRight();
         } else if (Input.GetButtonDown(BUTTON_ROTATE)) {
             Rotate();
-        } else if (Input.GetButtonDown(BUTTON_DOWN)) {
-            soundManager.PlayClipShapeDropDown();
-        } else if (fastDropAllowed && Input.GetButton(BUTTON_DOWN) && Time.time> timeToDrop) {
-            timeToDrop = Time.time + (fastDrop ? dropDownFastTime : dropDownNormalTime);
+        } else if (fastDropAllowed && Input.GetButton(BUTTON_DOWN) && Time.time> timeToDrop || Input.GetButtonDown(BUTTON_DOWN)) {
             fastDrop = true;
+            timeToDrop = Time.time + (fastDrop ? dropDownFastTime : dropDownNormalTime);
             MoveDown();
         } else if (Input.GetButtonUp(BUTTON_DOWN)) {
             fastDrop = false;
@@ -220,6 +218,9 @@ public class GameManager : MonoBehaviour {
         swipeDirection = Direction.none;
         // ================= touch control input ============================================================================================================
         #endregion
+        if (Input.GetButtonDown(BUTTON_DOWN) || swipeDirection == Direction.down) {
+            soundManager.PlayClipShapeDropDown();
+        }
         CheckForExtraButtons();
     }
 
