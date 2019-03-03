@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     const string BUTTON_RIGHT = "MoveRight";
     const string BUTTON_LEFT = "MoveLeft";
     const string BUTTON_DOWN = "MoveDown";
+    const string BUTTON_PARK = "Park";
     const string BUTTON_PLAY_AGAIN = "PlayAgain";
     const string BUTTON_EXIT_GAME = "ExitGame";
     const string BUTTON_PAUSE_GAME = "PauseGame";
@@ -48,24 +49,24 @@ public class GameManager : MonoBehaviour {
     Shape activeShape = null;
     SoundManager soundManager;
     float timeToDrop = 0;
-    int linesCompletedOverAll = 0;
-    bool gameOver = false;
-    float timeToRepeat = 0;
-    bool keyRepeatStarted = false;
-    int actualLevel = 1;
-    int totalScore = 0;
-    bool paused = false;
-    bool rotationLeft = true;
-    bool fastDropAllowed = true;
-    bool fastDrop = false;
     float dropDownNormalTime = 0;
     float dropDownFastTime = 0;
     float dropDownSpeed = 0;
     float timeToNextDrag = 0;
     float timeToNextSwipe = 0;
+    float timeToRepeat = 0;
+    int actualLevel = 1;
+    int linesCompletedOverAll = 0;
+    int totalScore = 0;
+    bool gameOver = false;
+    bool paused = false;
+    bool rotationLeft = true;
+    bool keyRepeatStarted = false;
+    bool fastDropAllowed = true;
+    bool fastDrop = false;
+    bool tapped = false;
     Direction dragDirection = Direction.none;
     Direction swipeDirection = Direction.none;
-    bool tapped = false;
 
     public float GetAbsoluteMinDragTime => ABSOLUTE_MIN_DRAG_TIME;
     public float GetAbsoluteMaxDragTime => ABSOLUTE_MAX_DRAG_TIME;
@@ -143,6 +144,10 @@ public class GameManager : MonoBehaviour {
         Debug.Log("Quit Application requested");
     }
 
+    public void ParkShape() {
+        activeShape = spawner.SwitchActualAndParkShapes();
+    }
+
     void DragHandler(Vector2 swipe) {
         dragDirection = GetDirection(swipe);
     }
@@ -180,13 +185,10 @@ public class GameManager : MonoBehaviour {
             MoveRight();
         } else if (Input.GetButtonDown(BUTTON_ROTATE)) {
             Rotate();
-        } else if (fastDropAllowed && Input.GetButton(BUTTON_DOWN) && Time.time> timeToDrop || Input.GetButtonDown(BUTTON_DOWN)) {
+        } else if (Input.GetButtonDown(BUTTON_DOWN) || (fastDropAllowed && Input.GetButton(BUTTON_DOWN) && Time.time> timeToDrop)) {
             fastDrop = true;
-            timeToDrop = Time.time + (fastDrop ? dropDownFastTime : dropDownNormalTime);
+            timeToDrop = Time.time + dropDownFastTime;
             MoveDown();
-        } else if (Input.GetButtonUp(BUTTON_DOWN)) {
-            fastDrop = false;
-            fastDropAllowed = true;
         }
         #endregion
         #region touch input
@@ -205,7 +207,7 @@ public class GameManager : MonoBehaviour {
             tapped = false;
         } else if (fastDropAllowed && dragDirection == Direction.down) {
             fastDrop = true;
-            timeToDrop = Time.time + (fastDrop ? dropDownFastTime : dropDownNormalTime);
+            timeToDrop = Time.time + dropDownFastTime;
             MoveDown();
         } else if (swipeDirection == Direction.down) {
             fastDrop = false;
@@ -220,6 +222,10 @@ public class GameManager : MonoBehaviour {
         #endregion
         if (Input.GetButtonDown(BUTTON_DOWN) || swipeDirection == Direction.down) {
             soundManager.PlayClipShapeDropDown();
+        }
+        if (Input.GetButtonUp(BUTTON_DOWN)) {
+            fastDrop = false;
+            fastDropAllowed = true;
         }
         CheckForExtraButtons();
     }
@@ -255,22 +261,23 @@ public class GameManager : MonoBehaviour {
         if (!board.ShapeInValidPosition(activeShape)) {
             LandShape();
             fastDrop = false;
-            fastDropAllowed = false;
+            if (Input.GetButton(BUTTON_DOWN) || dragDirection == Direction.down) {
+                fastDropAllowed = false;
+            }
         }
     }
 
     void CheckForExtraButtons() {
         if (Input.GetButtonDown(BUTTON_PAUSE_GAME)) {
             PauseResumeGame();
-        }
-        if (Input.GetButtonDown(BUTTON_TOGGLE_ROTATION)) {
+        } else if (Input.GetButtonDown(BUTTON_TOGGLE_ROTATION)) {
             ToggleRotation();
-        }
-        if (Input.GetButtonDown(BUTTON_TOGGLE_MUSIC)) {
+        } else if (Input.GetButtonDown(BUTTON_TOGGLE_MUSIC)) {
             soundManager.ToggleBackgroundMusic();
-        }
-        if (Input.GetButtonDown(BUTTON_TOGGLE_SOUND)) {
+        } else if (Input.GetButtonDown(BUTTON_TOGGLE_SOUND)) {
             soundManager.ToggleSound();
+        } else if (Input.GetButtonDown(BUTTON_PARK)) {
+            ParkShape();
         }
     }
 

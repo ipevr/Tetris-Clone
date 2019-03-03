@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnPointNextShape : MonoBehaviour
+public class DisplayShapeIcon : MonoBehaviour
 {
     [SerializeField] Shape[] shapes = new Shape[] { };
     [SerializeField] Transform[] shapeParents = new Transform[] { };
