@@ -131,9 +131,9 @@ public class Board : MonoBehaviour
                 y--;
                 soundManager.PlayFullLinesClip(amountOfDeletedLines);
                 amountOfDeletedLines++;
-                OnLineDeletedEvent(amountOfDeletedLines);
                 yield return new WaitForSeconds(timeToWaitAfterLineDeleted);
                 MoveDownAllLinesFrom(y + 1);
+                OnLineDeletedEvent(amountOfDeletedLines);
             }
         }
         yield return new WaitForEndOfFrame();

@@ -8,6 +8,7 @@ public class SettingsPanel : MonoBehaviour {
     [SerializeField] Slider swipeDistanceSlider = null;
     [SerializeField] Slider dragDistanceSlider = null;
     [SerializeField] Slider dragSpeedSlider = null;
+    [SerializeField] Toggle showGhostToggle = null;
 
     TouchController touchController = null;
     GameManager gameManager = null;
@@ -42,6 +43,10 @@ public class SettingsPanel : MonoBehaviour {
     public void ResetHighscore() {
         gameManager.ResetHighscore();
         panelManager.UpdateHighScore();
+    }
+
+    public bool ShowGhost() {
+        return showGhostToggle.isOn;
     }
 
     private void InitializePanel() {

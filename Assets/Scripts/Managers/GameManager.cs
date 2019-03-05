@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] bool backGroundMusicMutedOnStart = false;
 
     Shape activeShape = null;
+    Ghost ghostShape = null;
     SoundManager soundManager;
     float timeToDrop = 0;
     float dropDownNormalTime = 0;
@@ -82,6 +83,7 @@ public class GameManager : MonoBehaviour {
     
     void Start() {
         soundManager = FindObjectOfType<SoundManager>();
+        ghostShape = GetComponent<Ghost>();
         dropDownNormalTime = 1f / startDropDownSpeed;
         dropDownFastTime = 1f / dropDownFastSpeed;
         dropDownSpeed = startDropDownSpeed;
@@ -97,6 +99,7 @@ public class GameManager : MonoBehaviour {
         if (!gameOver && !paused) {
             if (!activeShape) {
                 activeShape = spawner.SpawnShape();
+                ghostShape.DrawGhost(activeShape, board);
             } else {
                 CheckForInput();
             }
@@ -145,6 +148,7 @@ public class GameManager : MonoBehaviour {
 
     public void ParkShape() {
         activeShape = spawner.SwitchActualAndParkShapes();
+        ghostShape.DrawGhost(activeShape, board);
     }
 
     void DragHandler(Vector2 swipe) {
@@ -167,6 +171,9 @@ public class GameManager : MonoBehaviour {
         CheckForLevelUp();
         totalScore += fullLineScore[amount - 1];
         panelManager.ShowFlyingScore(fullLineScore[amount - 1], amount == 4 ? true : false);
+        if (activeShape) {
+            ghostShape.DrawGhost(activeShape, board);
+        }
     }
 
     void CheckForInput() {
@@ -230,6 +237,8 @@ public class GameManager : MonoBehaviour {
         soundManager.PlayClipShapeRotate();
         if (!board.ShapeInValidPosition(activeShape)) {
             activeShape.Rotate(rotationLeft ? Direction.right : Direction.left);
+        } else {
+            ghostShape.DrawGhost(activeShape, board);
         }
     }
 
@@ -237,6 +246,7 @@ public class GameManager : MonoBehaviour {
         activeShape.MoveLeft();
         if (board.ShapeInValidPosition(activeShape)) {
             soundManager.PlayClipShapeMoveLeftRight();
+            ghostShape.DrawGhost(activeShape, board);
         } else {
             activeShape.MoveRight();
         }
@@ -246,6 +256,7 @@ public class GameManager : MonoBehaviour {
         activeShape.MoveRight();
         if (board.ShapeInValidPosition(activeShape)) {
             soundManager.PlayClipShapeMoveLeftRight();
+            ghostShape.DrawGhost(activeShape, board);
         } else {
             activeShape.MoveLeft();
         }
@@ -343,6 +354,9 @@ public class GameManager : MonoBehaviour {
             yield return new WaitForEndOfFrame();
         }
         paused = !paused;
+        if (!paused) {
+            ghostShape.DrawGhost(activeShape, board);
+        }
         panelManager.ShowPausedPanel(paused);
         soundManager.PlayBackgroundMusic(!paused);
         yield return null; 
