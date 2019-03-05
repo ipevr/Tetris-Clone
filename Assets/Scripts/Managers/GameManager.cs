@@ -63,7 +63,6 @@ public class GameManager : MonoBehaviour {
     bool rotationLeft = true;
     bool keyRepeatStarted = false;
     bool fastDropAllowed = true;
-    bool fastDrop = false;
     bool tapped = false;
     Direction dragDirection = Direction.none;
     Direction swipeDirection = Direction.none;
@@ -186,7 +185,6 @@ public class GameManager : MonoBehaviour {
         } else if (Input.GetButtonDown(BUTTON_ROTATE)) {
             Rotate();
         } else if (Input.GetButtonDown(BUTTON_DOWN) || (fastDropAllowed && Input.GetButton(BUTTON_DOWN) && Time.time> timeToDrop)) {
-            fastDrop = true;
             timeToDrop = Time.time + dropDownFastTime;
             MoveDown();
         }
@@ -206,11 +204,9 @@ public class GameManager : MonoBehaviour {
             timeToNextSwipe = Time.time + minTimeToSwipe;
             tapped = false;
         } else if (fastDropAllowed && dragDirection == Direction.down) {
-            fastDrop = true;
             timeToDrop = Time.time + dropDownFastTime;
             MoveDown();
         } else if (swipeDirection == Direction.down) {
-            fastDrop = false;
             fastDropAllowed = true;
         } else if (Time.time > timeToDrop) {
             timeToDrop = Time.time + dropDownNormalTime;
@@ -224,7 +220,6 @@ public class GameManager : MonoBehaviour {
             soundManager.PlayClipShapeDropDown();
         }
         if (Input.GetButtonUp(BUTTON_DOWN)) {
-            fastDrop = false;
             fastDropAllowed = true;
         }
         CheckForExtraButtons();
@@ -260,7 +255,6 @@ public class GameManager : MonoBehaviour {
         activeShape.MoveDown();
         if (!board.ShapeInValidPosition(activeShape)) {
             LandShape();
-            fastDrop = false;
             if (Input.GetButton(BUTTON_DOWN) || dragDirection == Direction.down) {
                 fastDropAllowed = false;
             }

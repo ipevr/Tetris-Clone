@@ -39,6 +39,7 @@ public class Spawner : MonoBehaviour {
             parkShape = helperShape;
             PlayShape(actualShape, actualPosition);
         }
+        parkShape.transform.rotation = Quaternion.identity;
         displayShapeHoldIcon.SetParent(parkShape);
         return actualShape;
     }
